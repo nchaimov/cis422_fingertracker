@@ -47,7 +47,7 @@ public class Driver {
 		};
 
 		// Mote mote = motes.get(0);
-		mote.enableIrCamera(IrCameraMode.FULL, IrCameraSensitivity.WII_LEVEL_5);
+		mote.enableIrCamera(IrCameraMode.FULL, IrCameraSensitivity.WII_LEVEL_1);
 		mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
 		// mote.rumble(2);
 		// Thread.sleep(20001);
