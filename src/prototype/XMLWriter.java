@@ -1,20 +1,30 @@
 package prototype;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.*; 
 
 import motej.IrPoint;
+import motej.Mote;
 import motej.event.IrCameraEvent;
 import motej.event.IrCameraListener;
+import motej.event.MoteDisconnectedEvent;
+import motej.event.MoteDisconnectedListener;
 
-public class XMLWriter implements IrCameraListener {
+public class XMLWriter implements IrCameraListener, MoteDisconnectedListener<Mote> {
+	
+	final int xAdjust = 1024;
+	final int yAdjust = 768;
 	private long startTime;
+	private boolean active;
 	long time;
 	private FileOutputStream fos = null;
 	private static String LineSep = System.getProperty("line.separator");
 
-	public XMLWriter(String date) {
+	public XMLWriter(String date, String dataPath) throws FileNotFoundException {
+		active = true;
+		this.fos = new FileOutputStream("./" + dataPath);
 		startTime = System.currentTimeMillis();
 		String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + LineSep;
 		String root = "<coordStream StartDateTime=\"" + date + "\">" + LineSep;
@@ -27,6 +37,7 @@ public class XMLWriter implements IrCameraListener {
 		}
 	}
  
+	
 	
 	//output </coordStream> at the end of the xml file
 	public void OutputXML() {
@@ -56,12 +67,23 @@ public class XMLWriter implements IrCameraListener {
 
 
 	public void irImageChanged(IrCameraEvent evt) {
+		if (active) {
 			for (int i = 0; i < 4; i ++) {
 					IrPoint pt = evt.getIrPoint(i);
 					AddEvent(new Integer(i + 1).toString(), 
-					(int) pt.getX(), (int) pt.getY());
+					(int) pt.getX(), (int) (yAdjust - pt.getY()));
 			}
-		// TODO Auto-generated method stub
-		
+		}
+	}
+
+
+
+	public void moteDisconnected(MoteDisconnectedEvent<Mote> evt) {
+		OutputXML();
+	}
+	
+	public void stopWrite() { 
+		active = false;
+		OutputXML(); 
 	}
 }
