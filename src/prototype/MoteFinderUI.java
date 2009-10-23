@@ -6,7 +6,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -41,7 +43,7 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener {
 
 	private MoteFinder moteFinder;
 
-	protected final ActionListener addActionListener = new ActionListener() {
+	protected final transient ActionListener addActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			String result = (String) JOptionPane.showInputDialog(MoteFinderUI.this,
 					"Enter the Bluetooth address of the Wiimote you wish to use.", "Add Wiimote",
@@ -106,17 +108,24 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener {
 
 	protected void readSavedAddresses() {
 		log.debug("Reading saved addresses...");
+		FileInputStream fin;
 		try {
-			FileInputStream fin = new FileInputStream(SAVED_MOTES_FILE);
+			fin = new FileInputStream(SAVED_MOTES_FILE);
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			listModel = (DefaultListModel) ois.readObject();
 			ois.close();
 			moteList.setModel(listModel);
 			log.debug("Addresses read: " + listModel.toString());
-		} catch (Exception e) {
-			log.info("No existing saved addresses.");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 	}
 
 	public void moteFound(Mote mote) {

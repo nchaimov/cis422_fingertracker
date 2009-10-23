@@ -18,17 +18,51 @@ import motej.IrCameraMode;
 import motej.IrCameraSensitivity;
 import motej.Mote;
 
+/**
+ * A window which displays the four points seen by the Wiimote IR camera.
+ * 
+ */
 public class PointTrackerUI extends JFrame {
 
+	private static final long serialVersionUID = 9219999171449199862L;
+
+	/**
+	 * The panel which draws the points.
+	 */
 	private SwingPointTracker tracker;
+
+	/**
+	 * Writes XML for the points the Wiimote detects.
+	 */
 	private static XMLWriter writer;
+
+	/**
+	 * True if we are currently writing to XML; false otherwise.
+	 */
 	private static boolean writing;
 
+	/**
+	 * Panel which provides buttons for setting sensitivity of the IR camera and
+	 * for starting and stopping writing to XML.
+	 * 
+	 */
 	protected static class MoteSettingsPanel extends JPanel {
 
+		private static final long serialVersionUID = -1893034921967850816L;
+
+		/**
+		 * The Wiimote we are getting IR data from.
+		 */
 		private Mote mote;
 		private JButton XMLstart;
 
+		/**
+		 * Create a new settings panel which controls the sensitivity of a
+		 * Wiimote.
+		 * 
+		 * @param m
+		 *            The Wiimote this panel controls.
+		 */
 		public MoteSettingsPanel(Mote m) {
 			super();
 			this.setLayout(new GridBagLayout());
@@ -56,6 +90,9 @@ public class PointTrackerUI extends JFrame {
 
 			ActionListener senstivityListener = new ActionListener() {
 
+				/**
+				 * Set the Wiimote sensitivity.
+				 */
 				public void actionPerformed(ActionEvent e) {
 					String bText = ((JButton) e.getSource()).getText();
 					System.out.println("Setting sensitivity to " + bText);
@@ -80,6 +117,9 @@ public class PointTrackerUI extends JFrame {
 			};
 
 			ActionListener xmlListener = new ActionListener() {
+				/**
+				 * Start and stop XML writing
+				 */
 				public void actionPerformed(ActionEvent e) {
 					if (!writing) {
 						try {
@@ -181,9 +221,19 @@ public class PointTrackerUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Create a window which draws points representing the points seen by the
+	 * Wiimote and which controls the Wiimote's sensitivity.
+	 * 
+	 * @param m
+	 *            The Wiimote to get data from and control.
+	 */
 	public PointTrackerUI(Mote m) {
 		super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
+
+		// The settings panel lets us change sensitivity and start/stop XML
+		// writing.
 		MoteSettingsPanel settingsPanel = new MoteSettingsPanel(m);
 		this.getContentPane().add(settingsPanel, BorderLayout.SOUTH);
 		tracker = new SwingPointTracker();
@@ -192,10 +242,9 @@ public class PointTrackerUI extends JFrame {
 		this.setPreferredSize(size);
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
-		this.setVisible(true);
-		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		// The Point Tracker should be updated whenever an IR point moves.
 		m.addIrCameraListener(tracker);
 	}
 
@@ -203,7 +252,4 @@ public class PointTrackerUI extends JFrame {
 		return tracker;
 	}
 
-	public void setWriter(XMLWriter writer) {
-		this.writer = writer;
-	}
 }
