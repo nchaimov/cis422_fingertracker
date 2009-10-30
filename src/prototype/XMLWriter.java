@@ -1,6 +1,7 @@
 package prototype;
 
 import java.io.FileNotFoundException;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import motej.IrPoint;

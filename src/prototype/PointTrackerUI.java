@@ -243,9 +243,10 @@ public class PointTrackerUI extends JFrame {
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		FingerLabeller fingerLabel = new FingerLabeller();
+		fingerLabel.addIrCameraListener(tracker);
 		// The Point Tracker should be updated whenever an IR point moves.
-		m.addIrCameraListener(tracker);
+		m.addIrCameraListener(fingerLabel);
 	}
 
 	public SwingPointTracker getSwingPointTracker() {
