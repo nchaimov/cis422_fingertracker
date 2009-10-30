@@ -1,5 +1,6 @@
-package prototype;
+package wiitracker.driver;
 
+import wiitracker.ui.PointTrackerUI;
 import motej.IrCameraMode;
 import motej.IrCameraSensitivity;
 import motej.Mote;
@@ -34,6 +35,8 @@ public class Driver {
 		// boxes, and intensity for the 4 brightest points in the
 		// field of view of the Wiimote camera. Use a high
 		// sensitivity.
+		boolean[] playerLeds = { true, false, false, true };
+		mote.setPlayerLeds(playerLeds);
 		mote.enableIrCamera(IrCameraMode.FULL, IrCameraSensitivity.values()[1]);
 
 		// Set the report mode, which specifies the format the Wiimote uses

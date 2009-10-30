@@ -1,4 +1,4 @@
-package prototype;
+package wiitracker.output;
 
 import java.io.FileNotFoundException;
 import java.io.FileNotFoundException;

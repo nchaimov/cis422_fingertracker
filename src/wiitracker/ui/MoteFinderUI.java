@@ -1,4 +1,4 @@
-package prototype;
+package wiitracker.ui;
 
 import info.clearthought.layout.TableLayout;
 

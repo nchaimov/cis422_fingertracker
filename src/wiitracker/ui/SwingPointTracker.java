@@ -1,4 +1,4 @@
-package prototype;
+package wiitracker.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;

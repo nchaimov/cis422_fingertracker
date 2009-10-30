@@ -1,4 +1,4 @@
-package prototype;
+package wiitracker.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,6 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+
+import wiitracker.fingertracking.FingerLabeler;
+import wiitracker.output.XMLWriter;
 
 import motej.IrCameraMode;
 import motej.IrCameraSensitivity;
@@ -243,7 +247,7 @@ public class PointTrackerUI extends JFrame {
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		FingerLabeller fingerLabel = new FingerLabeller();
+		FingerLabeler fingerLabel = new FingerLabeler();
 		fingerLabel.addIrCameraListener(tracker);
 		// The Point Tracker should be updated whenever an IR point moves.
 		m.addIrCameraListener(fingerLabel);
