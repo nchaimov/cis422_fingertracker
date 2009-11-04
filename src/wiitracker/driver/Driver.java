@@ -1,5 +1,7 @@
 package wiitracker.driver;
 
+import org.apache.log4j.BasicConfigurator;
+
 import wiitracker.ui.PointTrackerUI;
 import motej.IrCameraMode;
 import motej.IrCameraSensitivity;
@@ -22,13 +24,16 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 
+		BasicConfigurator.configure();
+		
 		// Workaround for bug in Bluecove which prevents connection
 		// to the Wiimote.
 		System.setProperty("bluecove.jsr82.psm_minimum_off", "true");
 
 		// Attempt to establish a connection to the WiiMote
+		try{
 		Mote mote = new Mote(BLUETOOTH_ADDRESS);
-
+	
 		// Turn on the Wiimote IR camera.
 		// Uses the "Full" report format, which provides
 		// X and Y coordinates, a "size" value, X and Y bounding
@@ -48,6 +53,9 @@ public class Driver {
 		PointTrackerUI ui = new PointTrackerUI(mote);
 		ui.setVisible(true);
 		ui.pack();
-
+		}catch (RuntimeException ex) {
+			System.err.println("A bad thing done happened.");
+			
+		}
 	}
 }
