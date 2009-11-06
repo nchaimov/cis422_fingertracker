@@ -12,21 +12,22 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-
-import wiitracker.fingertracking.FingerLabeler;
-import wiitracker.output.XMLWriter;
 
 import motej.IrCameraMode;
 import motej.IrCameraSensitivity;
 import motej.Mote;
+import motej.event.MoteDisconnectedEvent;
+import motej.event.MoteDisconnectedListener;
+import wiitracker.fingertracking.FingerLabeler;
+import wiitracker.output.XMLWriter;
 
 /**
  * A window which displays the four points seen by the Wiimote IR camera.
  * 
  */
-public class PointTrackerUI extends JFrame {
+public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 
 	private static final long serialVersionUID = 9219999171449199862L;
 
@@ -251,10 +252,18 @@ public class PointTrackerUI extends JFrame {
 		fingerLabel.addIrCameraListener(tracker);
 		// The Point Tracker should be updated whenever an IR point moves.
 		m.addIrCameraListener(fingerLabel);
+		m.addMoteDisconnectedListener(this);
 	}
 
 	public SwingPointTracker getSwingPointTracker() {
 		return tracker;
+	}
+
+	public void moteDisconnected(MoteDisconnectedEvent evt) {
+		JOptionPane.showMessageDialog(this,
+				"The finger tracking software has lost its connection to the Wiimote!",
+				"Connection Lost", JOptionPane.ERROR_MESSAGE);
+
 	}
 
 }
