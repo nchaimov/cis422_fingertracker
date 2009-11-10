@@ -24,14 +24,15 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import motej.Mote;
-import motej.MoteFinder;
-import motej.MoteFinderListener;
 
 import org.apache.log4j.Logger;
 
 import wiitracker.driver.Driver;
+import wiitracker.motefinder.MoteAddressFinder;
+import wiitracker.motefinder.MoteAddressFinderListener;
 
-public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSelectionListener {
+public class MoteFinderUI extends JFrame implements MoteAddressFinderListener,
+		ListSelectionListener {
 
 	private static final long serialVersionUID = -5102936730448673343L;
 
@@ -52,7 +53,7 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 
 	private JScrollPane moteListScrollPane;
 
-	private MoteFinder moteFinder;
+	private MoteAddressFinder moteFinder;
 	private boolean searching = false;
 
 	public boolean validateAddress(String address) {
@@ -186,8 +187,6 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 		this.getContentPane().add(connectButton, "2,5");
 		this.getContentPane().add(quitButton, "2,6");
 
-		
-
 	}
 
 	protected void writeSavedAddresses() {
@@ -225,13 +224,12 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 		}
 	}
 
-	public void moteFound(Mote mote) {
-		log.info("Found a Wiimote: " + mote.getBluetoothAddress());
-		if (!listModel.contains(mote.getBluetoothAddress())) {
-			listModel.addElement(mote.getBluetoothAddress());
+	public void moteFound(String mote) {
+		log.info("Found a Wiimote: " + mote);
+		if (!listModel.contains(mote)) {
+			listModel.addElement(mote);
 			writeSavedAddresses();
 		}
-		mote.disconnect();
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
@@ -246,9 +244,9 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 			}
 		}
 	}
-	
+
 	public void setMoteFinder() {
-		moteFinder = MoteFinder.getMoteFinder();
+		moteFinder = MoteAddressFinder.getMoteFinder();
 		moteFinder.addMoteFinderListener(this);
 	}
 
