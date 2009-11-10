@@ -48,6 +48,7 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 	private JButton removeButton;
 	private JButton connectButton;
 	private JButton searchButton;
+	private JButton quitButton;
 
 	private JScrollPane moteListScrollPane;
 
@@ -129,6 +130,15 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 		}
 	};
 
+	protected final transient ActionListener quitActionListener = new ActionListener() {
+
+		public void actionPerformed(ActionEvent e) {
+			writeSavedAddresses();
+			System.exit(0);
+		}
+
+	};
+
 	public MoteFinderUI() {
 		super();
 
@@ -153,6 +163,9 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 		removeButton.setEnabled(false);
 		connectButton.setEnabled(false);
 
+		quitButton = new JButton("Quit");
+		quitButton.addActionListener(quitActionListener);
+
 		final Dimension d = new Dimension(640, 480);
 		this.setSize(d);
 		this.setPreferredSize(d);
@@ -160,17 +173,18 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 		this.setMaximumSize(d);
 
 		final double[] colSize = { 10, TableLayout.FILL, 0.25, 10 };
-		final double[] rowSize = { 10, 30, 30, 30, TableLayout.FILL, 30, 10 };
+		final double[] rowSize = { 10, 30, 30, 30, TableLayout.FILL, 30, 30, 10 };
 		final TableLayout layout = new TableLayout(colSize, rowSize);
 		layout.setVGap(2);
 		layout.setHGap(5);
 		this.getContentPane().setLayout(layout);
 
-		this.getContentPane().add(moteListScrollPane, "1,1,1,5");
+		this.getContentPane().add(moteListScrollPane, "1,1,1,6");
 		this.getContentPane().add(addButton, "2,1");
 		this.getContentPane().add(removeButton, "2,2");
 		this.getContentPane().add(searchButton, "2,3");
 		this.getContentPane().add(connectButton, "2,5");
+		this.getContentPane().add(quitButton, "2,6");
 
 		
 
