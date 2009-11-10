@@ -1,5 +1,9 @@
 package wiitracker.driver;
 
+import java.awt.Component;
+
+import javax.swing.JOptionPane;
+
 import motej.IrCameraMode;
 import motej.IrCameraSensitivity;
 import motej.Mote;
@@ -38,6 +42,10 @@ public class Driver {
 			ex.printStackTrace();
 		}
 	}
+	
+	public static void errorPopup(Component parent) {
+		JOptionPane.showMessageDialog(parent, "Bluetooth Device is not ready", "Bluetooth Error", JOptionPane.ERROR_MESSAGE);
+	}
 
 	/**
 	 * MAC address for the Wiimote's Bluetooth controller.
@@ -62,6 +70,11 @@ public class Driver {
 		MoteFinderUI finderUI = new MoteFinderUI();
 		finderUI.pack();
 		finderUI.setVisible(true);
+		try { finderUI.setMoteFinder(); }
+		catch (RuntimeException e) { 
+			errorPopup(finderUI);
+			System.exit(1);
+		}
 
 	}
 }

@@ -172,8 +172,7 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 		this.getContentPane().add(searchButton, "2,3");
 		this.getContentPane().add(connectButton, "2,5");
 
-		moteFinder = MoteFinder.getMoteFinder();
-		moteFinder.addMoteFinderListener(this);
+		
 
 	}
 
@@ -232,6 +231,11 @@ public class MoteFinderUI extends JFrame implements MoteFinderListener, ListSele
 				connectButton.setEnabled(false);
 			}
 		}
+	}
+	
+	public void setMoteFinder() {
+		moteFinder = MoteFinder.getMoteFinder();
+		moteFinder.addMoteFinderListener(this);
 	}
 
 }
