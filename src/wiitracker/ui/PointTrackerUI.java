@@ -21,6 +21,7 @@ import motej.Mote;
 import motej.event.MoteDisconnectedEvent;
 import motej.event.MoteDisconnectedListener;
 import wiitracker.fingertracking.FingerLabeler;
+import wiitracker.fingertracking.IrCameraNotifier;
 import wiitracker.output.XMLWriter;
 
 /**
@@ -233,7 +234,7 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 	 * @param m
 	 *            The Wiimote to get data from and control.
 	 */
-	public PointTrackerUI(Mote m) {
+	public PointTrackerUI(Mote m, IrCameraNotifier notifier) {
 		super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
 
@@ -248,10 +249,8 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		FingerLabeler fingerLabel = new FingerLabeler();
-		fingerLabel.addIrCameraListener(tracker);
+		notifier.addIrCameraListener(tracker);
 		// The Point Tracker should be updated whenever an IR point moves.
-		m.addIrCameraListener(fingerLabel);
 		m.addMoteDisconnectedListener(this);
 	}
 

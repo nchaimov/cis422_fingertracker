@@ -11,6 +11,7 @@ import motej.request.ReportModeRequest;
 
 import org.apache.log4j.BasicConfigurator;
 
+import wiitracker.fingertracking.FingerLabeler;
 import wiitracker.ui.MoteFinderUI;
 import wiitracker.ui.PointTrackerUI;
 
@@ -34,7 +35,9 @@ public class Driver {
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
 
 			// Start the Swing UI.
-			PointTrackerUI ui = new PointTrackerUI(mote);
+			FingerLabeler fingerLabel = new FingerLabeler();
+			mote.addIrCameraListener(fingerLabel);
+			PointTrackerUI ui = new PointTrackerUI(mote, fingerLabel);
 			ui.setVisible(true);
 			ui.pack();
 		} catch (RuntimeException ex) {

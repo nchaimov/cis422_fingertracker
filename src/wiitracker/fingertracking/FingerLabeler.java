@@ -9,7 +9,7 @@ import motej.event.IrCameraEvent;
 import motej.event.IrCameraListener;
 import wiitracker.ui.SwingPointTracker;
 
-public class FingerLabeler implements IrCameraListener {
+public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 	EventListenerList listenerList = new EventListenerList();
 
 	// Finger[] fingers = new Finger[4];
@@ -58,7 +58,7 @@ public class FingerLabeler implements IrCameraListener {
 				+ Math.pow(a.getY() - b.getY(), 2));
 	}
 
-	public void addIrCameraListener(SwingPointTracker tracker) {
+	public void addIrCameraListener(IrCameraListener tracker) {
 		listenerList.add(IrCameraListener.class, tracker);
 
 	}
