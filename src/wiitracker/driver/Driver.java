@@ -11,7 +11,11 @@ import motej.request.ReportModeRequest;
 
 import org.apache.log4j.BasicConfigurator;
 
+
+import wiitracker.ui.CalibrationUI;
+
 import wiitracker.fingertracking.FingerLabeler;
+
 import wiitracker.ui.MoteFinderUI;
 import wiitracker.ui.PointTrackerUI;
 
@@ -33,7 +37,12 @@ public class Driver {
 			// to communicate with us. Report 3E is needed to get Full reports
 			// from the IR camera.
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
-
+			
+			//initialize CalibrationUI
+			CalibrationUI calui = new CalibrationUI(mote);
+			calui.setVisible(true);
+			calui.pack();
+			
 			// Start the Swing UI.
 			FingerLabeler fingerLabel = new FingerLabeler();
 			mote.addIrCameraListener(fingerLabel);
