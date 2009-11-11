@@ -147,11 +147,11 @@ public class MoteAddressFinder {
 		}
 
 		public void servicesDiscovered(int arg0, ServiceRecord[] arg1) {
-			// unused
+			log.debug("Service discovered.");
 		}
 
 		public void serviceSearchCompleted(int arg0, int arg1) {
-			// unused
+			log.debug("Service search completed.");
 		}
 	};
 

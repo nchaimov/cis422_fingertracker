@@ -2,14 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib/bluecove-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/bluecove-2.1.0.jar" sourcepath="/Users/nchaimov/.m2/repository/net/sf/bluecove/bluecove/2.1.0/bluecove-2.1.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.8.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-simple-1.5.8.jar"/>
 	<classpathentry kind="lib" path="lib/TableLayout-bin-jdk1.5-2009-08-26.jar"/>
 	<classpathentry kind="lib" path="lib/TableLayout-javadoc-2009-08-26.jar"/>
 	<classpathentry kind="lib" path="lib/TableLayout-src-2009-08-26.jar"/>
 	<classpathentry kind="lib" path="lib/TableLayoutBuilders-all-jdk1.5-2009-08-26.jar"/>
 	<classpathentry kind="lib" path="lib/TableLayoutExtensions-all-jdk1.5-2009-08-26.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

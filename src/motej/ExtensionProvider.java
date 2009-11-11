@@ -15,6 +15,8 @@
  */
 package motej;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -27,39 +29,47 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  * <p>
+ * 
  * @author <a href="mailto:vfritzsch@users.sourceforge.net">Volker Fritzsch</a>
  */
 public class ExtensionProvider {
-	
+
 	private static Map<String, Class<? extends Extension>> lookup;
-	
+
 	private Logger log = LoggerFactory.getLogger(ExtensionProvider.class);
-	
+
 	@SuppressWarnings("unchecked")
 	public ExtensionProvider() {
-		synchronized(ExtensionProvider.class) {
+		synchronized (ExtensionProvider.class) {
 			if (lookup == null) {
 				log.debug("Initializing lookup.");
 				lookup = new HashMap<String, Class<? extends Extension>>();
-				InputStream in = ExtensionProvider.class.getResourceAsStream("/motejx/extensions/extensions.properties");
+				InputStream in = null;
+				try {
+					in = new FileInputStream("resources/motejx/extensions/extensions.properties");
+				} catch (FileNotFoundException e) {
+					log.info("Unable to load extensions.properties", e);
+				}
 				Properties props = new Properties();
-				
+
 				if (in == null) {
-					log.info("no extensions.properties found. as a result, no extensions will be available.");
+					log
+							.info("no extensions.properties found. as a result, no extensions will be available.");
 					return;
 				}
-				
+
 				try {
 					props.load(in);
 					for (Object o : props.keySet()) {
 						String key = (String) o;
 						String value = props.getProperty(key);
-						
+
 						if (log.isDebugEnabled()) {
 							log.debug("Adding extension (" + key + " / " + value + ").");
 						}
-						
-						Class<? extends Extension> clazz = (Class<? extends Extension>) Class.forName(value);
+
+						Class<? extends Extension> clazz = (Class<? extends Extension>) Class
+								.forName(value);
 						lookup.put(key, clazz);
 					}
 				} catch (IOException ex) {
@@ -71,7 +81,7 @@ public class ExtensionProvider {
 		}
 		log.debug("Lookup initialized.");
 	}
-	
+
 	public Extension getExtension(byte[] id) {
 		String id0 = Integer.toHexString(id[0] & 0xff);
 		if (id0.length() == 1) {
@@ -83,12 +93,12 @@ public class ExtensionProvider {
 		}
 		String key = id0 + id1;
 		Class<? extends Extension> clazz = lookup.get(key);
-		
+
 		if (clazz == null) {
 			log.warn("No matching extension found for key: " + key);
 			return null;
 		}
-		
+
 		Extension extension = null;
 		try {
 			extension = clazz.newInstance();
