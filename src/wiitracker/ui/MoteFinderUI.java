@@ -103,10 +103,12 @@ public class MoteFinderUI extends JFrame implements MoteAddressFinderListener,
 	protected final transient ActionListener searchActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (searching) {
+				log.info("Stopping search for Wiimotes...");
 				searchButton.setText(START_SEARCHING);
 				moteFinder.stopDiscovery();
 				searching = false;
 			} else {
+				log.info("Starting search for Wiimotes...");
 				searchButton.setText(STOP_SEARCHING);
 				moteFinder.startDiscovery();
 				searching = true;
@@ -119,8 +121,10 @@ public class MoteFinderUI extends JFrame implements MoteAddressFinderListener,
 			final String address = moteList.getSelectedValue().toString();
 			final Mote mote;
 			try {
+				log.info("Connecting to Wiimote " + address);
 				mote = new Mote(moteList.getSelectedValue().toString());
 				Driver.enableMote(mote);
+				log.info("Successfully connected to " + address);
 				MoteFinderUI.this.setVisible(false);
 			} catch (RuntimeException ex) {
 				JOptionPane.showMessageDialog(MoteFinderUI.this,

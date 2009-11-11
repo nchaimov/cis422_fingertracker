@@ -9,13 +9,9 @@ import motej.IrCameraSensitivity;
 import motej.Mote;
 import motej.request.ReportModeRequest;
 
-import org.apache.log4j.BasicConfigurator;
-
-
-import wiitracker.ui.CalibrationUI;
+import org.apache.log4j.PropertyConfigurator;
 
 import wiitracker.fingertracking.FingerLabeler;
-
 import wiitracker.ui.MoteFinderUI;
 import wiitracker.ui.PointTrackerUI;
 
@@ -37,12 +33,12 @@ public class Driver {
 			// to communicate with us. Report 3E is needed to get Full reports
 			// from the IR camera.
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
-			
-			//initialize CalibrationUI
-			CalibrationUI calui = new CalibrationUI(mote);
-			calui.setVisible(true);
-			calui.pack();
-			
+
+			// initialize CalibrationUI
+			// CalibrationUI calui = new CalibrationUI(mote);
+			// calui.setVisible(true);
+			// calui.pack();
+
 			// Start the Swing UI.
 			FingerLabeler fingerLabel = new FingerLabeler();
 			mote.addIrCameraListener(fingerLabel);
@@ -54,9 +50,10 @@ public class Driver {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public static void errorPopup(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Bluetooth Device is not ready", "Bluetooth Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(parent, "Bluetooth Device is not ready", "Bluetooth Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -73,7 +70,7 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 
-		BasicConfigurator.configure();
+		PropertyConfigurator.configure("log4j.properties");
 
 		// Workaround for bug in Bluecove which prevents connection
 		// to the Wiimote.
@@ -82,8 +79,9 @@ public class Driver {
 		MoteFinderUI finderUI = new MoteFinderUI();
 		finderUI.pack();
 		finderUI.setVisible(true);
-		try { finderUI.setMoteFinder(); }
-		catch (RuntimeException e) { 
+		try {
+			finderUI.setMoteFinder();
+		} catch (RuntimeException e) {
 			errorPopup(finderUI);
 			System.exit(1);
 		}
