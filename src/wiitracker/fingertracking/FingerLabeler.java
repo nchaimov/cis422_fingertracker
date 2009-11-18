@@ -58,9 +58,8 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 				+ Math.pow(a.getY() - b.getY(), 2));
 	}
 
-	public void addIrCameraListener(IrCameraListener tracker) {
-		listenerList.add(IrCameraListener.class, tracker);
-
+	public void addIrCameraListener(IrCameraListener listener) {
+		listenerList.add(IrCameraListener.class, listener);
 	}
 
 }
