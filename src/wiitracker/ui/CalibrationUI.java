@@ -31,12 +31,12 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 	private static SwingPointTracker tracker;
 	private static IrPoint[] points;
 	
-	protected static class MapCalibrationPanel extends JPanel {
+	protected class MapCalibrationPanel extends JPanel {
 
 		private static final long serialVersionUID = -1893034921967850816L;
 
 
-		private static Mote mote;
+		private Mote mote;
 		private JButton setPoint;
 		private JButton delPoint;
 		private JButton stop;
@@ -73,14 +73,14 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 						pointStack.push(new IrPoint(points[1].x, points[1].y));
 					}
 					else if (b.equals(delPoint)) {
-						pointStack.pop();
+						if (!pointStack.isEmpty()) { pointStack.pop(); }
 					}
 					//else if (b.equals(showStack)) {
 					//	for (int i=0; i< pointStack.size(); i++) {
 					//		System.out.println(pointStack.peek().x + " " + pointStack.pop().y);
 					//	}
 					else if (b.equals(stop)) {
-						Driver.startPointTrackerUI();
+						Driver.startPointTrackerUI(CalibrationUI.this);
 					}
 				}
 			};

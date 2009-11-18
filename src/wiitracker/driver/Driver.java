@@ -29,6 +29,7 @@ public class Driver {
 			// boxes, and intensity for the 4 brightest points in the
 			// field of view of the Wiimote camera. Use a high
 			// sensitivity.
+			Driver.mote = mote;
 			boolean[] playerLeds = { true, false, false, true };
 			mote.setPlayerLeds(playerLeds);
 			mote.enableIrCamera(IrCameraMode.FULL, IrCameraSensitivity.values()[1]);
@@ -51,10 +52,11 @@ public class Driver {
 		}
 	}
 
-	public static void startPointTrackerUI() {
+	public static void startPointTrackerUI(CalibrationUI calui) {
 		// Start the Swing UI.
 		PointTrackerUI ui = new PointTrackerUI(mote, pipeline);
 		ui.setVisible(true);
+		calui.setVisible(false);
 		ui.pack();
 	}
 
