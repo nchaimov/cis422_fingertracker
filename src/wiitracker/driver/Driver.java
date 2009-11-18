@@ -18,6 +18,9 @@ import wiitracker.ui.MoteFinderUI;
 import wiitracker.ui.PointTrackerUI;
 
 public class Driver {
+	
+	private static IrCameraNotifier pipeline;
+	private static Mote				mote;
 
 	public static void enableMote(Mote mote) {
 		try {
@@ -36,22 +39,27 @@ public class Driver {
 			// from the IR camera.
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
 
-			// initialize CalibrationUI (not working yet)
-			//CalibrationUI calui = new CalibrationUI(mote);
-			//calui.setVisible(true);
-			//calui.pack();
+			//initialize CalibrationUI (not working yet)
+			CalibrationUI calui = new CalibrationUI(mote);
+			calui.setVisible(true);
+			calui.pack();
 			
-			// Start the Swing UI.
-			IrCameraNotifier pipeline = PipelineFactory.createPipe(mote);
-			PointTrackerUI ui = new PointTrackerUI(mote, pipeline);
-			ui.setVisible(true);
-			ui.pack();
+			pipeline = PipelineFactory.createPipe(mote);
+			
+
 
 			
 		} catch (RuntimeException ex) {
 			System.err.println("A bad thing done happened.");
 			ex.printStackTrace();
 		}
+	}
+	
+	public static void startPointTrackerUI() {
+		// Start the Swing UI.
+		PointTrackerUI ui = new PointTrackerUI(mote, pipeline);
+		ui.setVisible(true);
+		ui.pack();
 	}
 
 	public static void errorPopup(Component parent) {
