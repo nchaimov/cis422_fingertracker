@@ -11,16 +11,15 @@ import motej.request.ReportModeRequest;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import wiitracker.fingertracking.FingerLabeler;
 import wiitracker.fingertracking.IrCameraNotifier;
 import wiitracker.ui.CalibrationUI;
 import wiitracker.ui.MoteFinderUI;
 import wiitracker.ui.PointTrackerUI;
 
 public class Driver {
-	
+
 	private static IrCameraNotifier pipeline;
-	private static Mote				mote;
+	private static Mote mote;
 
 	public static void enableMote(Mote mote) {
 		try {
@@ -39,22 +38,19 @@ public class Driver {
 			// from the IR camera.
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
 
-			//initialize CalibrationUI (not working yet)
+			// initialize CalibrationUI (not working yet)
 			CalibrationUI calui = new CalibrationUI(mote);
 			calui.setVisible(true);
 			calui.pack();
-			
+
 			pipeline = PipelineFactory.createPipe(mote);
-			
 
-
-			
 		} catch (RuntimeException ex) {
 			System.err.println("A bad thing done happened.");
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public static void startPointTrackerUI() {
 		// Start the Swing UI.
 		PointTrackerUI ui = new PointTrackerUI(mote, pipeline);
@@ -66,8 +62,6 @@ public class Driver {
 		JOptionPane.showMessageDialog(parent, "Bluetooth Device is not ready", "Bluetooth Error",
 				JOptionPane.ERROR_MESSAGE);
 	}
-	
-
 
 	/**
 	 * MAC address for the Wiimote's Bluetooth controller.
