@@ -22,14 +22,21 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 		IrPoint[] in = new IrPoint[4];
 		for (int i = 0; i < 4; i++) {
 			in[i] = evt.getIrPoint(i);
+
+
 			if ((evt.getIrPoint(i).x >= 1023) && (evt.getIrPoint(i).y >= 1023)) {
 				proceed = false;
 			}
+
 		}
 
-		// if all four fingers are visible, label the fingers relative to the
-		// thumb
-		if (proceed) {
+		
+		//if all four fingers are visible, label the fingers relative to the thumb
+	//	if(proceed) {
+
+
+		
+
 			float[][] distances = new float[4][4];
 			float maxDistance = -1;
 			int maxI = 0;
@@ -65,10 +72,19 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 			for (IrCameraListener l : listeners) {
 				l.irImageChanged(event);
 			}
-		} else {
-			// TODO Do something.
+		} 
+		
+
+	/*	else {
+			
+			IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), in[thumb],
+				in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
+			for (IrCameraListener l : listeners) {
+			l.irImageChanged(event);
+			}
 		}
-	}
+
+	}*/
 
 	private float d(Point2D a, Point2D b) {
 		return (float) Math.sqrt(Math.pow(a.getX() - b.getX(), 2)

@@ -1,5 +1,6 @@
 package wiitracker.fingertracking;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import javax.media.jai.PerspectiveTransform;
@@ -10,9 +11,14 @@ import motej.event.IrCameraEvent;
 import motej.event.IrCameraListener;
 
 public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
+	
+	private static final TransformNotifier INSTANCE = new TransformNotifier(); 
 	protected PerspectiveTransform transform = new PerspectiveTransform();
 	EventListenerList listenerList = new EventListenerList();
 
+	private TransformNotifier() {}
+	
+	
 	public void irImageChanged(IrCameraEvent evt) {
 		IrPoint[] in = new IrPoint[4];
 		for (int i = 0; i < 4; i++) {
@@ -32,5 +38,13 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 
 	public void addIrCameraListener(IrCameraListener listener) {
 		listenerList.add(IrCameraListener.class, listener);
+	}
+	
+	public static TransformNotifier getInstance() {
+		return INSTANCE;
+	}
+	
+	public static void update() {
+		
 	}
 }

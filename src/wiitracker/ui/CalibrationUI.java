@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 
 import wiitracker.driver.Driver;
 import wiitracker.fingertracking.FingerLabeler;
+import wiitracker.fingertracking.TransformNotifier;
 import wiitracker.ui.PointTrackerUI.MoteSettingsPanel;
 
 import motej.IrCameraMode;
@@ -30,6 +32,9 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 
 	private static SwingPointTracker tracker;
 	private static IrPoint[] points;
+	private Stack<IrPoint> pointStack;
+	private Point2D[] pointarray = new Point2D[4];
+	private boolean finished;
 
 	protected class MapCalibrationPanel extends JPanel {
 
@@ -40,9 +45,10 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		private JButton delPoint;
 		private JButton stop;
 		private JButton showStack;
-		private Stack<IrPoint> pointStack;
+
 
 		public MapCalibrationPanel(Mote mote) {
+			
 			super();
 			this.setLayout(new GridBagLayout());
 
@@ -55,6 +61,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 			GridBagConstraints c = new GridBagConstraints();
 
 			this.mote = mote;
+			finished = false;
 
 			pointStack = new Stack<IrPoint>();
 
@@ -66,11 +73,15 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 			ActionListener buttonListener = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JButton b = (JButton) e.getSource();
-					if (b.equals(setPoint)) {
+					if (b.equals(setPoint) && (pointStack.size() < 4)) {
 						points = tracker.getPointArray();
 						pointStack.push(new IrPoint(points[1].x, points[1].y));
+						tracker.updateCalibrationPoints(true);
 					} else if (b.equals(delPoint)) {
-						if (!pointStack.isEmpty()) { pointStack.pop(); }
+						if (!pointStack.isEmpty()) { 
+							pointStack.pop(); 
+							tracker.updateCalibrationPoints(false);
+						}
 					}
 					// else if (b.equals(showStack)) {
 					// for (int i=0; i< pointStack.size(); i++) {
@@ -78,7 +89,8 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 					// pointStack.pop().y);
 					// }
 					else if (b.equals(stop)) {
-						Driver.startPointTrackerUI(CalibrationUI.this);
+						sendData(pointStack);
+						if(finished) { Driver.startPointTrackerUI(CalibrationUI.this); }
 					}
 				}
 			};
@@ -132,6 +144,21 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m.addIrCameraListener(tracker);
+	}
+	
+	public void sendData(Stack<IrPoint> stack) {
+		if(pointStack.size() < 4) {
+			JOptionPane.showMessageDialog(this,
+				pointStack.size() + " points have been entered\n" + "Please enter 4 corner points before proceeding",
+				"Insufficient Data", JOptionPane.WARNING_MESSAGE);
+		}
+		else {
+			for(int i=0; i<4; i++) {
+				if(!pointStack.isEmpty()) { pointarray[i] = pointStack.pop(); }
+			}
+			TransformNotifier.getInstance().transform(pointarray);
+			finished = true;
+		}
 	}
 
 	public void moteDisconnected(MoteDisconnectedEvent evt) {
