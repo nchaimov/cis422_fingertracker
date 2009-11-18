@@ -25,9 +25,7 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 	}
 	
 	public Point2D[] transform (Point2D[] points) {
-		for (int i = 0; i < points.size; i ++ ) {
-			transform.transform(points, 0, points, 0, points.size);
-		}
+		transform.transform(points, 0, points, 0, points.size);
 		return points;
 	}
 	public void addIrCameraListener(IrCameraListener listener) {
