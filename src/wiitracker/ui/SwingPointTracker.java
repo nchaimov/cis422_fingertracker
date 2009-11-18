@@ -81,7 +81,7 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 		}
 		repaint();
 	}
-	
+
 	public IrPoint[] getPointArray() {
 		return points;
 	}

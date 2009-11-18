@@ -1,4 +1,5 @@
 package wiitracker.fingertracking;
+
 import motej.event.IrCameraListener;
 
 public interface IrCameraNotifier {

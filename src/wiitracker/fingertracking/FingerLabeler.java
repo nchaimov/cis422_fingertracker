@@ -7,7 +7,6 @@ import javax.swing.event.EventListenerList;
 import motej.IrPoint;
 import motej.event.IrCameraEvent;
 import motej.event.IrCameraListener;
-import wiitracker.ui.SwingPointTracker;
 
 public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 	EventListenerList listenerList = new EventListenerList();
@@ -18,15 +17,19 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 
 	public void irImageChanged(IrCameraEvent evt) {
 		proceed = true;
-		int[] order = new int[4]; // order[i] is the number of the finger corresponding to the point i.
+		int[] order = new int[4]; // order[i] is the number of the finger
+		// corresponding to the point i.
 		IrPoint[] in = new IrPoint[4];
 		for (int i = 0; i < 4; i++) {
 			in[i] = evt.getIrPoint(i);
-			if ((evt.getIrPoint(i).x >= 1023) && (evt.getIrPoint(i).y >= 1023)) { proceed = false; }
+			if ((evt.getIrPoint(i).x >= 1023) && (evt.getIrPoint(i).y >= 1023)) {
+				proceed = false;
+			}
 		}
-		
-		//if all four fingers are visible, label the fingers relative to the thumb
-		if(proceed) {
+
+		// if all four fingers are visible, label the fingers relative to the
+		// thumb
+		if (proceed) {
 			float[][] distances = new float[4][4];
 			float maxDistance = -1;
 			int maxI = 0;
@@ -45,30 +48,25 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 					if (thisFingerMin > distances[i][j] && distances[i][j] > 0.5) {
 						thisFingerMin = distances[i][j];
 						perFingerMin[i] = j;
-	
+
 					}
 				}
 			}
-			boolean isIThumb = d(in[maxI], in[perFingerMin[maxI]]) > d(in[maxJ], in[perFingerMin[maxJ]]);
+			boolean isIThumb = d(in[maxI], in[perFingerMin[maxI]]) > d(in[maxJ],
+					in[perFingerMin[maxJ]]);
 			int thumb = isIThumb ? maxI : maxJ, pinky = isIThumb ? maxJ : maxI;
 			IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
-			order [thumb] = 0;
-			order [perFingerMin[thumb]] = 1;
-			order [perFingerMin[pinky]] = 2;
-			order [pinky] = 3;
+			order[thumb] = 0;
+			order[perFingerMin[thumb]] = 1;
+			order[perFingerMin[pinky]] = 2;
+			order[pinky] = 3;
 			IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), in[thumb],
-				in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
+					in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
 			for (IrCameraListener l : listeners) {
-			l.irImageChanged(event);
+				l.irImageChanged(event);
 			}
-		}
-		else {
-			
-			IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), in[thumb],
-				in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
-			for (IrCameraListener l : listeners) {
-			l.irImageChanged(event);
-			}
+		} else {
+			// TODO Do something.
 		}
 	}
 
