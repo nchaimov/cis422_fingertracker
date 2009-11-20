@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import wiitracker.driver.Driver;
 import wiitracker.fingertracking.FingerLabeler;
+import wiitracker.fingertracking.IrCameraNotifier;
 import wiitracker.fingertracking.TransformNotifier;
 import wiitracker.ui.PointTrackerUI.MoteSettingsPanel;
 
@@ -75,8 +76,15 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 					JButton b = (JButton) e.getSource();
 					if (b.equals(setPoint) && (pointStack.size() < 4)) {
 						points = tracker.getPointArray();
-						pointStack.push(new IrPoint(points[1].x, points[1].y));
-						tracker.updateCalibrationPoints(true);
+						if (points[1].x == 1023 && points[1].y ==1023 ){
+							JOptionPane.showMessageDialog(MapCalibrationPanel.this,
+									"Corner Point not in viewable area of Wii Remote", "Corner Point Collection Problem", JOptionPane.WARNING_MESSAGE);
+						}
+						else {
+							
+							pointStack.push(new IrPoint(points[1].x, points[1].y));
+							tracker.updateCalibrationPoints(true);
+						}
 					} else if (b.equals(delPoint)) {
 						if (!pointStack.isEmpty()) { 
 							pointStack.pop(); 
@@ -90,7 +98,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 					// }
 					else if (b.equals(stop)) {
 						sendData(pointStack);
-						if(finished) { Driver.startPointTrackerUI(CalibrationUI.this); }
+						if(finished) { Driver.startPointTrackerUI(CalibrationUI.this, pointarray); }
 					}
 				}
 			};
@@ -126,7 +134,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		}
 	};
 
-	public CalibrationUI(Mote m) {
+	public CalibrationUI(Mote m, IrCameraNotifier pipeline) {
 		// super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
 
@@ -143,7 +151,8 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		m.addIrCameraListener(tracker);
+		
+		pipeline.addIrCameraListener(tracker);
 	}
 	
 	public void sendData(Stack<IrPoint> stack) {
@@ -156,7 +165,6 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 			for(int i=0; i<4; i++) {
 				if(!pointStack.isEmpty()) { pointarray[i] = pointStack.pop(); }
 			}
-			TransformNotifier.getInstance().transform(pointarray);
 			finished = true;
 		}
 	}

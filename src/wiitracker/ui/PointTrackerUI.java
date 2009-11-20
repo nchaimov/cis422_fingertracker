@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.io.FileNotFoundException;
 import java.util.Date;
 
@@ -22,6 +24,7 @@ import motej.event.MoteDisconnectedEvent;
 import motej.event.MoteDisconnectedListener;
 import wiitracker.fingertracking.FingerLabeler;
 import wiitracker.fingertracking.IrCameraNotifier;
+import wiitracker.fingertracking.TransformNotifier;
 import wiitracker.output.XMLWriter;
 
 /**
@@ -234,15 +237,28 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 	 * @param m
 	 *            The Wiimote to get data from and control.
 	 */
-	public PointTrackerUI(Mote m, IrCameraNotifier notifier) {
+	public PointTrackerUI(Mote m, IrCameraNotifier notifier, Point2D[] corners) {
 		super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
 
 		// The settings panel lets us change sensitivity and start/stop XML
 		// writing.
 		MoteSettingsPanel settingsPanel = new MoteSettingsPanel(m);
+		
 		this.getContentPane().add(settingsPanel, BorderLayout.SOUTH);
 		tracker = new SwingPointTracker();
+		
+		int imageHeight = tracker.getImage().getIconHeight();
+		int imageWidth 	= tracker.getImage().getIconHeight();
+		Point2D[] imageCorners = new Point2D[4];
+		imageCorners[0] = new Point(0,0);
+		imageCorners[1] = new Point(imageWidth, 0);
+		imageCorners[2] = new Point(imageWidth, imageHeight);
+		imageCorners[3]= new Point(0,imageHeight);
+		
+		TransformNotifier.getInstance().setTransform(corners,imageCorners);
+		
+		tracker.setMapVisible(true);
 		Dimension size = new Dimension(1024, 824);
 		this.setSize(size);
 		this.setPreferredSize(size);

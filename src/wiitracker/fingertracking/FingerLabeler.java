@@ -16,6 +16,7 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 	long[] lastSeen = new long[4];
 
 	public void irImageChanged(IrCameraEvent evt) {
+				
 		proceed = true;
 		int[] order = new int[4]; // order[i] is the number of the finger
 		// corresponding to the point i.
