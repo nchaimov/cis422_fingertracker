@@ -80,8 +80,8 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 		for (int i = 0; i < newPoints.length; i++) {
 			newPoints[i] = (Point2D) points[i].clone();
 		}
-		transform.transform(points, 0, points, 0, points.length);
-		return points;
+		transform.transform(points, 0, newPoints, 0, points.length);
+		return newPoints;
 	}
 	
 	

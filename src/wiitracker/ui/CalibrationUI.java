@@ -170,8 +170,8 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		pipeline.addIrCameraListener(tracker);
+		m.addMoteDisconnectedListener(this);
 	}
 	
 	public void sendData(Stack<IrPoint> stack) {
