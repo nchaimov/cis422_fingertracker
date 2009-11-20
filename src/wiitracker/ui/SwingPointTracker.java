@@ -42,6 +42,8 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 	private int[][] cornerarray = new int[4][2];
 	private int cornerindex;
 
+	private boolean showMap = false;
+
 	/**
 	 * Create a new point tracker.
 	 */
@@ -71,7 +73,7 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 		super.paint(g);
 
 		// Paint background image, if we have one.
-		if (image != null) {
+		if (showMap && image != null) {
 			image.paintIcon(this, g, 0, 0);
 		}
 
@@ -129,6 +131,14 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 
 	public void setImage(ImageIcon image) {
 		this.image = image;
+	}
+
+	public void setMapVisible(boolean showMap) {
+		this.showMap = showMap;
+	}
+
+	public boolean isMapVisible() {
+		return showMap;
 	}
 
 }
