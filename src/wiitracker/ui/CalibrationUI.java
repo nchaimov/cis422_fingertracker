@@ -100,12 +100,12 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 						else {
 							
 							pointStack.push(new IrPoint(points[1].x, points[1].y));
-							tracker.updateCalibrationPoints(true);
+							tracker.updateCalibrationPoints(true, pointStack);
 						}
 					} else if (b.equals(delPoint)) {
 						if (!pointStack.isEmpty()) { 
 							pointStack.pop(); 
-							tracker.updateCalibrationPoints(false);
+							tracker.updateCalibrationPoints(false, pointStack);
 						}
 					}
 					else if (b.equals(done)) {

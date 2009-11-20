@@ -3,6 +3,7 @@ package wiitracker.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Stack;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -113,11 +114,11 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 
 	// paint the selected corners of the map onto the screen for reference
 	// during calibration
-	public void updateCalibrationPoints(boolean increase) {
+	public void updateCalibrationPoints(boolean increase, Stack<IrPoint> p) {
 		if (increase) {
 			if (cornerindex < 4) {
-				cornerarray[cornerindex][0] = points[1].x;
-				cornerarray[cornerindex][1] = points[1].y;
+				cornerarray[cornerindex][0] = p.peek().x;
+				cornerarray[cornerindex][1] = p.peek().y;
 				cornerindex++;
 			}
 		} else {
