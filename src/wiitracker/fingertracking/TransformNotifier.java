@@ -11,9 +11,8 @@ import motej.event.IrCameraEvent;
 import motej.event.IrCameraListener;
 /**
  * 
- * This class wraps the PerspectiveTransform class for detail hiding and to make it a member of the pipeline.
+ * This singleton class wraps the PerspectiveTransform class for detail hiding and to make it fit in the pipeline.
  * PerspectiveTransform creates a projective transform from one plane in space to another. Specifically, since the map is identical to the image, it takes any point from the camera, and returns its location relative to the map.
- * 
  * 
  * @author areinder
  *
@@ -26,12 +25,23 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 
 	private TransformNotifier() {}
 	
-	
+	/**
+	 * Template-required irImageChanged method. Transforms all points in evt and passes a new event to all listeners containing the new points.
+	 */
 	public void irImageChanged(IrCameraEvent evt) {
 		IrPoint[] in = new IrPoint[4];
 		for (int i = 0; i < 4; i++) {
 			in[i] = evt.getIrPoint(i);
 		}
+		IrPoint[] out = (IrPoint[]) this.transform(in);		
+
+		IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
+		IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), out[0],
+				out[1], out[2], out[3]);
+		for (IrCameraListener l : listeners) {
+			l.irImageChanged(event);
+		}
+		
 
 	}
 
@@ -73,7 +83,8 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 		transform.transform(points, 0, points, 0, points.length);
 		return points;
 	}
-
+	
+	
 	public void addIrCameraListener(IrCameraListener listener) {
 		listenerList.add(IrCameraListener.class, listener);
 	}

@@ -62,11 +62,13 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 			boolean isIThumb = d(in[maxI], in[perFingerMin[maxI]]) > d(in[maxJ],
 					in[perFingerMin[maxJ]]);
 			int thumb = isIThumb ? maxI : maxJ, pinky = isIThumb ? maxJ : maxI;
-			IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
+			
 			order[thumb] = 0;
 			order[perFingerMin[thumb]] = 1;
 			order[perFingerMin[pinky]] = 2;
 			order[pinky] = 3;
+
+			IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
 			IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), in[thumb],
 					in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
 			for (IrCameraListener l : listeners) {
