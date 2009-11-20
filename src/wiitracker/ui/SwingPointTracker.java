@@ -3,9 +3,8 @@ package wiitracker.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.util.Stack;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import motej.IrPoint;
@@ -35,12 +34,17 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 	private static final int yAdjust = 768;
 
 	/**
-	 * Create a new point tracker.
+	 * The image for the map on which we are displaying.
 	 */
-	
+	// TODO Don't hardcode the image.
+	private ImageIcon image = new ImageIcon("resources/map.png");
+
 	private int[][] cornerarray = new int[4][2];
 	private int cornerindex;
-	
+
+	/**
+	 * Create a new point tracker.
+	 */
 	public SwingPointTracker() {
 		super();
 		Dimension d = new Dimension(1024, 768);
@@ -65,7 +69,13 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.setColor(Color.WHITE);
+
+		// Paint background image, if we have one.
+		if (image != null) {
+			image.paintIcon(this, g, 0, 0);
+		}
+
+		g.setColor(Color.GRAY);
 		g.drawRect(0, 0, 1024, 768);
 		g.setColor(Color.RED);
 		g.fillOval(points[0].x, yAdjust - points[0].y, 10, 10);
@@ -73,15 +83,15 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 		g.fillOval(points[1].x, yAdjust - points[1].y, 10, 10);
 		g.setColor(Color.BLUE);
 		g.fillOval(points[2].x, yAdjust - points[2].y, 10, 10);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.ORANGE);
 		g.fillOval(points[3].x, yAdjust - points[3].y, 10, 10);
-		
-		//paint corners for CalibrationUI
-		g.setColor(Color.WHITE);
-		for(int i=0; i<cornerindex; i++) {
+
+		// paint corners for CalibrationUI
+		g.setColor(Color.MAGENTA);
+		for (int i = 0; i < cornerindex; i++) {
 			g.fillOval(cornerarray[i][0], yAdjust - cornerarray[i][1], 10, 10);
 		}
-		
+
 	}
 
 	/**
@@ -98,17 +108,27 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 	public IrPoint[] getPointArray() {
 		return points;
 	}
-	
-	//paint the selected corners of the map onto the screen for reference during calibration
+
+	// paint the selected corners of the map onto the screen for reference
+	// during calibration
 	public void updateCalibrationPoints(boolean increase) {
-		if(increase) {
-			if(cornerindex < 4) {
+		if (increase) {
+			if (cornerindex < 4) {
 				cornerarray[cornerindex][0] = points[0].x;
 				cornerarray[cornerindex][1] = points[0].y;
 				cornerindex++;
 			}
+		} else {
+			cornerindex--;
 		}
-		else cornerindex--;
+	}
+
+	public ImageIcon getImage() {
+		return image;
+	}
+
+	public void setImage(ImageIcon image) {
+		this.image = image;
 	}
 
 }
