@@ -50,6 +50,8 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 	 */
 	private static boolean writing;
 
+	private IrCameraNotifier pipeline;
+	
 	/**
 	 * Panel which provides buttons for setting sensitivity of the IR camera and
 	 * for starting and stopping writing to XML.
@@ -64,6 +66,8 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 		 */
 		private Mote mote;
 		private JButton XMLstart;
+		
+		private IrCameraNotifier pipeline;
 
 		/**
 		 * Create a new settings panel which controls the sensitivity of a
@@ -72,10 +76,12 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 		 * @param m
 		 *            The Wiimote this panel controls.
 		 */
-		public MoteSettingsPanel(Mote m) {
+		public MoteSettingsPanel(Mote m, final IrCameraNotifier pipeline) {
 			super();
 			this.setLayout(new GridBagLayout());
 
+			this.pipeline = pipeline;
+			
 			Dimension d = new Dimension(1024, 100);
 			this.setSize(d);
 			this.setPreferredSize(d);
@@ -133,7 +139,7 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 					if (!writing) {
 						try {
 							writer = new XMLWriter(new Date().toString(), "./data.xml");
-							mote.addIrCameraListener(writer);
+							pipeline.addIrCameraListener(writer);
 							mote.addMoteDisconnectedListener(writer);
 							writing = true;
 							((JButton) e.getSource()).setText("XML stop");
@@ -241,9 +247,11 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 		super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
 
+		this.pipeline = notifier;
+		
 		// The settings panel lets us change sensitivity and start/stop XML
 		// writing.
-		MoteSettingsPanel settingsPanel = new MoteSettingsPanel(m);
+		MoteSettingsPanel settingsPanel = new MoteSettingsPanel(m, pipeline);
 		
 		this.getContentPane().add(settingsPanel, BorderLayout.SOUTH);
 		tracker = new SwingPointTracker();
