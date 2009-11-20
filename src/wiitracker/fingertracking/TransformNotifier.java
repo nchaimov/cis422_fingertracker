@@ -33,9 +33,8 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 		for (int i = 0; i < 4; i++) {
 			in[i] = evt.getIrPoint(i);
 		}
-		
 		IrPoint[] out = (IrPoint[]) this.transform(in);		
-		
+
 		IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
 		IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), out[0],
 				out[1], out[2], out[3]);
@@ -81,8 +80,8 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 		for (int i = 0; i < newPoints.length; i++) {
 			newPoints[i] = (Point2D) points[i].clone();
 		}
-		transform.transform(points, 0, newPoints, 0, points.length);
-		return newPoints;
+		transform.transform(points, 0, points, 0, points.length);
+		return points;
 	}
 	
 	

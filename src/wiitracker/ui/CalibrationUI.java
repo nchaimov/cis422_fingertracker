@@ -28,15 +28,33 @@ import motej.IrPoint;
 import motej.Mote;
 import motej.event.MoteDisconnectedEvent;
 import motej.event.MoteDisconnectedListener;
-
+/**
+ * Creates a window for gathering the corners of the map. Sends the data off to be
+ * used for Perspective Transformation.
+ * @author mbintz
+ *
+ */
 public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
-
+	/**
+	 * The panel which draws the points. 
+	 */
 	private static SwingPointTracker tracker;
 	private static IrPoint[] points;
 	private Stack<IrPoint> pointStack;
+	/**
+	 * Array of corners sent to be transformed.
+	 */
 	private Point2D[] pointarray = new Point2D[4];
+	/**
+	 * Done gathering corner points
+	 */
 	private boolean finished;
-
+	/**
+	 * Panel which provides buttons for adding/deleting corner points and one to declare your 
+	 * finished gathering corner points.
+	 * @author mbintz
+	 *
+	 */
 	protected class MapCalibrationPanel extends JPanel {
 
 		private static final long serialVersionUID = -1893034921967850816L;
@@ -44,7 +62,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		private Mote mote;
 		private JButton setPoint;
 		private JButton delPoint;
-		private JButton stop;
+		private JButton done;
 		private JButton showStack;
 
 
@@ -68,8 +86,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 
 			setPoint = new JButton("Set Point");
 			delPoint = new JButton("Delete Point");
-			stop = new JButton("Stop");
-			// showStack = new JButton("Show Stack");
+			done = new JButton("Done");
 
 			ActionListener buttonListener = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -91,12 +108,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 							tracker.updateCalibrationPoints(false);
 						}
 					}
-					// else if (b.equals(showStack)) {
-					// for (int i=0; i< pointStack.size(); i++) {
-					// System.out.println(pointStack.peek().x + " " +
-					// pointStack.pop().y);
-					// }
-					else if (b.equals(stop)) {
+					else if (b.equals(done)) {
 						sendData(pointStack);
 						if(finished) { Driver.startPointTrackerUI(CalibrationUI.this, pointarray); }
 					}
@@ -105,7 +117,7 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 
 			setPoint.addActionListener(buttonListener);
 			delPoint.addActionListener(buttonListener);
-			stop.addActionListener(buttonListener);
+			done.addActionListener(buttonListener);
 
 			c.gridx = 0;
 			c.gridy = 0;
@@ -129,11 +141,18 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 			c.gridheight = 1;
 			c.weighty = 1;
 
-			this.add(stop, c);
+			this.add(done, c);
 
 		}
 	};
-
+/**
+ * Creates the UI for gathering points from the Wii Remote to be used as
+ * the corner points.
+ * 
+ * @param m
+ * 			The Wiimote to get data from and control.
+ * @param pipeline
+ */
 	public CalibrationUI(Mote m, IrCameraNotifier pipeline) {
 		// super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());

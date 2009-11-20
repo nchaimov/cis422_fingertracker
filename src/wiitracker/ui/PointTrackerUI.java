@@ -4,10 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 import java.io.FileNotFoundException;
 import java.util.Date;
 
@@ -24,7 +22,6 @@ import motej.event.MoteDisconnectedEvent;
 import motej.event.MoteDisconnectedListener;
 import wiitracker.fingertracking.FingerLabeler;
 import wiitracker.fingertracking.IrCameraNotifier;
-import wiitracker.fingertracking.TransformNotifier;
 import wiitracker.output.XMLWriter;
 
 /**
@@ -50,8 +47,6 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 	 */
 	private static boolean writing;
 
-	private IrCameraNotifier pipeline;
-	
 	/**
 	 * Panel which provides buttons for setting sensitivity of the IR camera and
 	 * for starting and stopping writing to XML.
@@ -66,8 +61,6 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 		 */
 		private Mote mote;
 		private JButton XMLstart;
-		
-		private IrCameraNotifier pipeline;
 
 		/**
 		 * Create a new settings panel which controls the sensitivity of a
@@ -76,12 +69,10 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 		 * @param m
 		 *            The Wiimote this panel controls.
 		 */
-		public MoteSettingsPanel(Mote m, final IrCameraNotifier pipeline) {
+		public MoteSettingsPanel(Mote m) {
 			super();
 			this.setLayout(new GridBagLayout());
 
-			this.pipeline = pipeline;
-			
 			Dimension d = new Dimension(1024, 100);
 			this.setSize(d);
 			this.setPreferredSize(d);
@@ -139,7 +130,7 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 					if (!writing) {
 						try {
 							writer = new XMLWriter(new Date().toString(), "./data.xml");
-							pipeline.addIrCameraListener(writer);
+							mote.addIrCameraListener(writer);
 							mote.addMoteDisconnectedListener(writer);
 							writing = true;
 							((JButton) e.getSource()).setText("XML stop");
@@ -243,30 +234,15 @@ public class PointTrackerUI extends JFrame implements MoteDisconnectedListener {
 	 * @param m
 	 *            The Wiimote to get data from and control.
 	 */
-	public PointTrackerUI(Mote m, IrCameraNotifier notifier, Point2D[] corners) {
+	public PointTrackerUI(Mote m, IrCameraNotifier notifier) {
 		super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
 
-		this.pipeline = notifier;
-		
 		// The settings panel lets us change sensitivity and start/stop XML
 		// writing.
-		MoteSettingsPanel settingsPanel = new MoteSettingsPanel(m, pipeline);
-		
+		MoteSettingsPanel settingsPanel = new MoteSettingsPanel(m);
 		this.getContentPane().add(settingsPanel, BorderLayout.SOUTH);
 		tracker = new SwingPointTracker();
-		
-		int imageHeight = tracker.getImage().getIconHeight();
-		int imageWidth 	= tracker.getImage().getIconHeight();
-		Point2D[] imageCorners = new Point2D[4];
-		imageCorners[0] = new Point(0,0);
-		imageCorners[1] = new Point(imageWidth, 0);
-		imageCorners[2] = new Point(imageWidth, imageHeight);
-		imageCorners[3]= new Point(0,imageHeight);
-		
-		TransformNotifier.getInstance().setTransform(corners,imageCorners);
-		
-		tracker.setMapVisible(true);
 		Dimension size = new Dimension(1024, 824);
 		this.setSize(size);
 		this.setPreferredSize(size);

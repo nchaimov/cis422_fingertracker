@@ -1,7 +1,6 @@
 package wiitracker.driver;
 
 import java.awt.Component;
-import java.awt.geom.Point2D;
 
 import javax.swing.JOptionPane;
 
@@ -21,6 +20,7 @@ public class Driver {
 
 	private static IrCameraNotifier pipeline;
 	private static Mote mote;
+
 	public static void enableMote(Mote mote) {
 		try {
 			// Turn on the Wiimote IR camera.
@@ -31,7 +31,6 @@ public class Driver {
 			// sensitivity.
 			Driver.mote = mote;
 			boolean[] playerLeds = { true, false, false, true };
-			
 			mote.setPlayerLeds(playerLeds);
 			mote.enableIrCamera(IrCameraMode.FULL, IrCameraSensitivity.values()[1]);
 
@@ -40,14 +39,12 @@ public class Driver {
 			// from the IR camera.
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
 
-			pipeline = PipelineFactory.createPipe(mote);
-			
-			// initialize CalibrationUI 
-			CalibrationUI calui = new CalibrationUI(mote, pipeline);
+			// initialize CalibrationUI (not working yet)
+			CalibrationUI calui = new CalibrationUI(mote);
 			calui.setVisible(true);
 			calui.pack();
 
-			
+			pipeline = PipelineFactory.createPipe(mote);
 
 		} catch (RuntimeException ex) {
 			System.err.println("A bad thing done happened.");
@@ -55,10 +52,9 @@ public class Driver {
 		}
 	}
 
-	public static void startPointTrackerUI(CalibrationUI calui, Point2D[] corners) {
+	public static void startPointTrackerUI(CalibrationUI calui) {
 		// Start the Swing UI.
-		
-		PointTrackerUI ui = new PointTrackerUI(mote, pipeline, corners);
+		PointTrackerUI ui = new PointTrackerUI(mote, pipeline);
 		ui.setVisible(true);
 		calui.setVisible(false);
 		ui.pack();

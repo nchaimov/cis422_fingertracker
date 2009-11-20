@@ -116,8 +116,8 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 	public void updateCalibrationPoints(boolean increase) {
 		if (increase) {
 			if (cornerindex < 4) {
-				cornerarray[cornerindex][0] = points[1].x;
-				cornerarray[cornerindex][1] = points[1].y;
+				cornerarray[cornerindex][0] = points[0].x;
+				cornerarray[cornerindex][1] = points[0].y;
 				cornerindex++;
 			}
 		} else {
