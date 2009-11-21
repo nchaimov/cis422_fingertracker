@@ -42,4 +42,9 @@ public class Finger extends Double implements Cloneable {
 	{
 		return type;
 	}
+	
+	@Override
+	public String toString() {
+		return "" + type.toString() + " (" + this.x + ", " + this.y + ")";
+	}
 }

@@ -1,6 +1,7 @@
 package wiitracker.fingertracking;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class FingerEvent {
@@ -10,8 +11,10 @@ public class FingerEvent {
 		
 		public FingerEvent(Finger[] inFingers) {
 			for (Finger finger : inFingers)	{
-				if (finger.getType() == PointType.UNKNOWN) unknowns.add(finger);
-				fingers[finger.getType().value] = (Finger) finger.clone();
+				//if (finger.getType() == PointType.UNKNOWN) unknowns.add(finger);
+				if (finger.getType().isKnown())
+					fingers[finger.getType().value] = (Finger) finger.clone();
+				else unknowns.add((Finger) finger.clone());
 			}
 		}
 
@@ -34,17 +37,14 @@ public class FingerEvent {
 		 */
 		public Finger[] getFingers()
 		{
-			Finger[] outFingers = new Finger[PointType.NUMBER_OF_FINGERS];
-			int i = 0;
+			Finger[] outFingers = (Finger[]) fingers.clone();
+			Iterator<Finger> unknownsIterator = unknowns.iterator();
 			
-			for(int j = 0; j < PointType.NUMBER_OF_FINGERS; j++)
-				if ((outFingers[i] = fingers[j]) != null) i++;
-			
-			for (int j = 0; j < unknowns.size(); j++)
-				outFingers[i] = unknowns.get(j);
-			
-			while (i < PointType.NUMBER_OF_FINGERS)
-				outFingers[i++] = new Finger(PointType.OFF_SCREEN);
+			for(int i = 0; i < outFingers.length; ++i) {
+				if(outFingers[i] == null && unknownsIterator.hasNext()) {
+					outFingers[i] = unknownsIterator.next();
+				}
+			}
 			
 			return outFingers;
 		}

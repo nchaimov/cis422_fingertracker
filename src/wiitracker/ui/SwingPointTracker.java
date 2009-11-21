@@ -8,6 +8,8 @@ import java.util.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 import motej.IrPoint;
 import motej.event.IrCameraEvent;
 import wiitracker.fingertracking.Finger;
@@ -21,6 +23,8 @@ import wiitracker.fingertracking.PointType;
  */
 public class SwingPointTracker extends JPanel implements FingerListener {
 
+	private final Logger log = Logger.getLogger(this.getClass());
+	
 	/**
 	 * 
 	 */
@@ -90,10 +94,9 @@ public class SwingPointTracker extends JPanel implements FingerListener {
 		g.drawRect(0, 0, 1024, 768);
 
 		for (Finger f : points) {
-			if (f.getType().hasPosition()) {
+				log.debug("Drawing " + f.getType().toString() + " at (" + (int) Math.round(f.x) + ", " + (int) Math.round(yAdjust - f.y) + ")");
 				g.setColor(f.getType().color);
 				g.fillOval((int) Math.round(f.x), (int) Math.round(yAdjust - f.y), 10, 10);
-			}
 		}
 
 		// paint corners for CalibrationUI
@@ -150,6 +153,7 @@ public class SwingPointTracker extends JPanel implements FingerListener {
 	}
 
 	public void fingerChanged(FingerEvent evt) {
+		log.debug("Got a FingerEvent!");
 		points = evt.getFingers();
 		repaint();
 	}

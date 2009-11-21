@@ -6,6 +6,8 @@ import java.awt.geom.Point2D;
 import javax.media.jai.PerspectiveTransform;
 import javax.swing.event.EventListenerList;
 
+import org.apache.log4j.Logger;
+
 import motej.event.IrCameraListener;
 /**
  * 
@@ -16,6 +18,8 @@ import motej.event.IrCameraListener;
  *
  */
 public class TransformNotifier implements FingerListener, FingerNotifier {
+	
+	private final Logger log = Logger.getLogger(this.getClass());
 	
 	private static final TransformNotifier INSTANCE = new TransformNotifier(); 
 	protected PerspectiveTransform transform = new PerspectiveTransform();
@@ -29,15 +33,23 @@ public class TransformNotifier implements FingerListener, FingerNotifier {
 	public void fingerChanged(FingerEvent evt) {
 		Finger[] in = evt.getFingers();
 		
-		Finger[] out = (Finger[]) this.transform(in);		
+		for(int i = 0; i < in.length; ++i) {
+			log.debug("In (before transform): " + in[i].toString());
+		}
 
+		
+		Finger[] out = (Finger[]) this.transform(in);		
+		
+		for(int i = 0; i < in.length; ++i) {
+			log.debug("In: " + in[i].toString());
+			log.debug("Out: " + out[i].toString());
+		}
+		
 		FingerListener[] listeners = listenerList.getListeners(FingerListener.class);
 		FingerEvent event = new FingerEvent(out);
 		for (FingerListener l : listeners) {
 			l.fingerChanged(event);
 		}
-		
-
 	}
 
 	private void setTransform(PerspectiveTransform p) {
