@@ -1,5 +1,6 @@
 package wiitracker.fingertracking;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 public class Finger extends Double implements Cloneable {
@@ -16,6 +17,16 @@ public class Finger extends Double implements Cloneable {
 		super(arg0, arg1);
 		this.setType(t);
 	}
+	
+	public Finger(Point2D point, PointType t) {
+		this(point.getX(), point.getY(), t);
+	}
+	
+	public Finger(Point2D point) {
+		this(point.getX(), point.getY());
+	}
+	
+	
 	public Finger(PointType t)
 	{
 		super();

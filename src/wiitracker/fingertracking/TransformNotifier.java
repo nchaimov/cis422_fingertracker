@@ -6,8 +6,6 @@ import java.awt.geom.Point2D;
 import javax.media.jai.PerspectiveTransform;
 import javax.swing.event.EventListenerList;
 
-import motej.IrPoint;
-import motej.event.IrCameraEvent;
 import motej.event.IrCameraListener;
 /**
  * 
@@ -17,7 +15,7 @@ import motej.event.IrCameraListener;
  * @author areinder
  *
  */
-public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
+public class TransformNotifier implements FingerListener, FingerNotifier {
 	
 	private static final TransformNotifier INSTANCE = new TransformNotifier(); 
 	protected PerspectiveTransform transform = new PerspectiveTransform();
@@ -28,18 +26,15 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 	/**
 	 * Template-required irImageChanged method. Transforms all points in evt and passes a new event to all listeners containing the new points.
 	 */
-	public void irImageChanged(IrCameraEvent evt) {
-		IrPoint[] in = new IrPoint[4];
-		for (int i = 0; i < 4; i++) {
-			in[i] = evt.getIrPoint(i);
-		}
-		IrPoint[] out = (IrPoint[]) this.transform(in);		
+	public void fingerChanged(FingerEvent evt) {
+		Finger[] in = evt.getFingers();
+		
+		Finger[] out = (Finger[]) this.transform(in);		
 
-		IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
-		IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), out[0],
-				out[1], out[2], out[3]);
-		for (IrCameraListener l : listeners) {
-			l.irImageChanged(event);
+		FingerListener[] listeners = listenerList.getListeners(FingerListener.class);
+		FingerEvent event = new FingerEvent(out);
+		for (FingerListener l : listeners) {
+			l.fingerChanged(event);
 		}
 		
 
@@ -85,8 +80,8 @@ public class TransformNotifier implements IrCameraListener, IrCameraNotifier {
 	}
 	
 	
-	public void addIrCameraListener(IrCameraListener listener) {
-		listenerList.add(IrCameraListener.class, listener);
+	public void addFingerListener(FingerListener listener) {
+		listenerList.add(FingerListener.class, listener);
 	}
 	
 	public static TransformNotifier getInstance() {

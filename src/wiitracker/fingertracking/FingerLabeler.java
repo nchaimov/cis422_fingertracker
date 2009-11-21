@@ -4,39 +4,29 @@ import java.awt.geom.Point2D;
 
 import javax.swing.event.EventListenerList;
 
-import motej.IrPoint;
-import motej.event.IrCameraEvent;
-import motej.event.IrCameraListener;
-
-public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
+public class FingerLabeler implements FingerListener, FingerNotifier {
 	EventListenerList listenerList = new EventListenerList();
-	boolean proceed;
+	boolean doLabel;
 
 	// Finger[] fingers = new Finger[4];
 	long[] lastSeen = new long[4];
 
-	public void irImageChanged(IrCameraEvent evt) {
-		proceed = true;
+	public void fingerChanged(FingerEvent evt) {
+		doLabel = true;
 		int[] order = new int[4]; // order[i] is the number of the finger
 		// corresponding to the point i.
-		IrPoint[] in = new IrPoint[4];
+		Finger[] in = evt.getFingers();
+		
 		for (int i = 0; i < 4; i++) {
-			in[i] = evt.getIrPoint(i);
-
-
-			if ((evt.getIrPoint(i).x >= 1023) && (evt.getIrPoint(i).y >= 1023)) {
-				proceed = false;
+			if (! in[i].getType().isKnown()) {
+				doLabel = false;
+				order[i] = -1;
 			}
-
 		}
 
 		
 		//if all four fingers are visible, label the fingers relative to the thumb
-	//	if(proceed) {
-
-
-		
-
+		if(doLabel) {
 			float[][] distances = new float[4][4];
 			float maxDistance = -1;
 			int maxI = 0;
@@ -52,7 +42,7 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 						maxJ = j;
 						maxDistance = distances[i][j];
 					}
-					if (thisFingerMin > distances[i][j] && distances[i][j] > 0.5) {
+					if (thisFingerMin > distances[i][j] && distances[i][j] > 0.000001) {
 						thisFingerMin = distances[i][j];
 						perFingerMin[i] = j;
 
@@ -61,40 +51,37 @@ public class FingerLabeler implements IrCameraListener, IrCameraNotifier {
 			}
 			boolean isIThumb = d(in[maxI], in[perFingerMin[maxI]]) > d(in[maxJ],
 					in[perFingerMin[maxJ]]);
-			int thumb = isIThumb ? maxI : maxJ, pinky = isIThumb ? maxJ : maxI;
+			int thumb = isIThumb ? maxI : maxJ, ring = isIThumb ? maxJ : maxI;
 			
 			order[thumb] = 0;
 			order[perFingerMin[thumb]] = 1;
-			order[perFingerMin[pinky]] = 2;
-			order[pinky] = 3;
+			order[perFingerMin[ring]] = 2;
+			order[ring] = 3;
+			in[thumb].setType(PointType.THUMB); 
+			in[perFingerMin[thumb]].setType(PointType.INDEX);
+			in[perFingerMin[ring]].setType(PointType.MIDDLE); 
+			in[ring].setType(PointType.RING);
 
-			IrCameraListener[] listeners = listenerList.getListeners(IrCameraListener.class);
-			IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), in[thumb],
-					in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
-			for (IrCameraListener l : listeners) {
-				l.irImageChanged(event);
-			}
-		} 
-		
-
-	/*	else {
+			FingerListener[] listeners = listenerList.getListeners(FingerListener.class);
 			
-			IrCameraEvent event = new IrCameraEvent(evt.getSource(), evt.getMode(), in[thumb],
-				in[perFingerMin[thumb]], in[perFingerMin[pinky]], in[pinky]);
-			for (IrCameraListener l : listeners) {
-			l.irImageChanged(event);
+			FingerEvent event = new FingerEvent(in);
+			for (FingerListener l : listeners) {
+				l.fingerChanged(event);
 			}
 		}
+		else {
+			
+		}
 
-	}*/
+	}
 
 	private float d(Point2D a, Point2D b) {
 		return (float) Math.sqrt(Math.pow(a.getX() - b.getX(), 2)
 				+ Math.pow(a.getY() - b.getY(), 2));
 	}
 
-	public void addIrCameraListener(IrCameraListener listener) {
-		listenerList.add(IrCameraListener.class, listener);
+	public void addFingerListener(FingerListener listener) {
+		listenerList.add(FingerListener.class, listener);
 	}
 
 }

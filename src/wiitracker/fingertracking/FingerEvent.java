@@ -7,6 +7,7 @@ public class FingerEvent {
 
 		Finger[] fingers = new Finger[PointType.NUMBER_OF_FINGERS];
 		ArrayList <Finger> unknowns = new ArrayList <Finger>();
+		
 		public FingerEvent(Finger[] inFingers) {
 			for (Finger finger : inFingers)	{
 				if (finger.getType() == PointType.UNKNOWN) unknowns.add(finger);
