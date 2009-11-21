@@ -1,22 +1,21 @@
 package wiitracker.output;
 
 import java.io.FileNotFoundException;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import motej.IrPoint;
 import motej.Mote;
-import motej.event.IrCameraEvent;
-import motej.event.IrCameraListener;
 import motej.event.MoteDisconnectedEvent;
 import motej.event.MoteDisconnectedListener;
+import wiitracker.fingertracking.Finger;
+import wiitracker.fingertracking.FingerEvent;
+import wiitracker.fingertracking.FingerListener;
 
 /**
  * Writes IR points to a file in XML format.
  * 
  * Based upon the code from the existing video finger tracker.
  */
-public class XMLWriter implements IrCameraListener, MoteDisconnectedListener<Mote> {
+public class XMLWriter implements FingerListener, MoteDisconnectedListener<Mote> {
 
 	/**
 	 * Maximum X coordinate.
@@ -119,12 +118,11 @@ public class XMLWriter implements IrCameraListener, MoteDisconnectedListener<Mot
 	 * Called when the Wiimote senses a change in the position of an IR point.
 	 * Writes the event to a file, if we are currently writing.
 	 */
-	public void irImageChanged(IrCameraEvent evt) {
+	public void fingerChanged(FingerEvent evt) {
 		if (active) {
-			for (int i = 0; i < 4; i++) {
-				IrPoint pt = evt.getIrPoint(i);
-				addEvent(Integer.valueOf(i + 1).toString(), (int) pt.getX(), (int) (yAdjust - pt
-						.getY()));
+			for (Finger f : evt.getFingers()) {
+				addEvent("" + f.getType().value, (int) Math.round(f.x), (int) Math.round(yAdjust
+						- f.y));
 			}
 		}
 	}

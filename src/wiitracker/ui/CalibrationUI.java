@@ -1,11 +1,9 @@
 package wiitracker.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
@@ -13,33 +11,34 @@ import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import wiitracker.driver.Driver;
-import wiitracker.fingertracking.FingerLabeler;
-import wiitracker.fingertracking.IrCameraNotifier;
-import wiitracker.fingertracking.TransformNotifier;
-import wiitracker.ui.PointTrackerUI.MoteSettingsPanel;
-
-import motej.IrCameraMode;
 import motej.IrPoint;
 import motej.Mote;
 import motej.event.MoteDisconnectedEvent;
 import motej.event.MoteDisconnectedListener;
+import wiitracker.driver.Driver;
+import wiitracker.fingertracking.Finger;
+import wiitracker.fingertracking.FingerNotifier;
+
 /**
- * Creates a window for gathering the corners of the map. Sends the data off to be
- * used for Perspective Transformation.
+ * Creates a window for gathering the corners of the map. Sends the data off to
+ * be used for Perspective Transformation.
+ * 
  * @author mbintz
- *
+ * 
  */
 public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 	/**
-	 * The panel which draws the points. 
+	 * 
+	 */
+	private static final long serialVersionUID = 1224244318674974438L;
+	/**
+	 * The panel which draws the points.
 	 */
 	private static SwingPointTracker tracker;
-	private static IrPoint[] points;
+	private static Finger[] points;
 	private Stack<IrPoint> pointStack;
 	/**
 	 * Array of corners sent to be transformed.
@@ -49,11 +48,13 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 	 * Done gathering corner points
 	 */
 	private boolean finished;
+
 	/**
-	 * Panel which provides buttons for adding/deleting corner points and one to declare your 
-	 * finished gathering corner points.
+	 * Panel which provides buttons for adding/deleting corner points and one to
+	 * declare your finished gathering corner points.
+	 * 
 	 * @author mbintz
-	 *
+	 * 
 	 */
 	protected class MapCalibrationPanel extends JPanel {
 
@@ -65,9 +66,8 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		private JButton done;
 		private JButton showStack;
 
-
 		public MapCalibrationPanel(Mote mote) {
-			
+
 			super();
 			this.setLayout(new GridBagLayout());
 
@@ -93,24 +93,26 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 					JButton b = (JButton) e.getSource();
 					if (b.equals(setPoint) && (pointStack.size() < 4)) {
 						points = tracker.getPointArray();
-						if (points[1].x == 1023 && points[1].y ==1023 ){
+						if (points[1].x == 1023 && points[1].y == 1023) {
 							JOptionPane.showMessageDialog(MapCalibrationPanel.this,
-									"Corner Point not in viewable area of Wii Remote", "Corner Point Collection Problem", JOptionPane.WARNING_MESSAGE);
-						}
-						else {
-							
-							pointStack.push(new IrPoint(points[1].x, points[1].y));
+									"Corner Point not in viewable area of Wii Remote",
+									"Corner Point Collection Problem", JOptionPane.WARNING_MESSAGE);
+						} else {
+
+							pointStack.push(new IrPoint((int) Math.round(points[1].x), (int) Math
+									.round(points[1].y)));
 							tracker.updateCalibrationPoints(true, pointStack);
 						}
 					} else if (b.equals(delPoint)) {
-						if (!pointStack.isEmpty()) { 
-							pointStack.pop(); 
+						if (!pointStack.isEmpty()) {
+							pointStack.pop();
 							tracker.updateCalibrationPoints(false, pointStack);
 						}
-					}
-					else if (b.equals(done)) {
+					} else if (b.equals(done)) {
 						sendData(pointStack);
-						if(finished) { Driver.startPointTrackerUI(CalibrationUI.this, pointarray); }
+						if (finished) {
+							Driver.startPointTrackerUI(CalibrationUI.this, pointarray);
+						}
 					}
 				}
 			};
@@ -145,15 +147,16 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 
 		}
 	};
-/**
- * Creates the UI for gathering points from the Wii Remote to be used as
- * the corner points.
- * 
- * @param m
- * 			The Wiimote to get data from and control.
- * @param pipeline
- */
-	public CalibrationUI(Mote m, IrCameraNotifier pipeline) {
+
+	/**
+	 * Creates the UI for gathering points from the Wii Remote to be used as the
+	 * corner points.
+	 * 
+	 * @param m
+	 *            The Wiimote to get data from and control.
+	 * @param pipeline
+	 */
+	public CalibrationUI(Mote m, FingerNotifier pipeline) {
 		// super("WiiMote Point Tracker");
 		this.getContentPane().setLayout(new BorderLayout());
 
@@ -170,19 +173,20 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		this.setMinimumSize(size);
 		this.getContentPane().add(tracker, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pipeline.addIrCameraListener(tracker);
+		pipeline.addFingerListener(tracker);
 		m.addMoteDisconnectedListener(this);
 	}
-	
+
 	public void sendData(Stack<IrPoint> stack) {
-		if(pointStack.size() < 4) {
-			JOptionPane.showMessageDialog(this,
-				pointStack.size() + " points have been entered\n" + "Please enter 4 corner points before proceeding",
-				"Insufficient Data", JOptionPane.WARNING_MESSAGE);
-		}
-		else {
-			for(int i=0; i<4; i++) {
-				if(!pointStack.isEmpty()) { pointarray[i] = pointStack.pop(); }
+		if (pointStack.size() < 4) {
+			JOptionPane.showMessageDialog(this, pointStack.size() + " points have been entered\n"
+					+ "Please enter 4 corner points before proceeding", "Insufficient Data",
+					JOptionPane.WARNING_MESSAGE);
+		} else {
+			for (int i = 0; i < 4; i++) {
+				if (!pointStack.isEmpty()) {
+					pointarray[i] = pointStack.pop();
+				}
 			}
 			finished = true;
 		}

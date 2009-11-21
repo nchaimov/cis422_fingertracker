@@ -10,19 +10,27 @@ import javax.swing.JPanel;
 
 import motej.IrPoint;
 import motej.event.IrCameraEvent;
-import motej.event.IrCameraListener;
+import wiitracker.fingertracking.Finger;
+import wiitracker.fingertracking.FingerEvent;
+import wiitracker.fingertracking.FingerListener;
+import wiitracker.fingertracking.PointType;
 
 /**
  * Listens for points from the Wiimote and draws them to the screen.
  * 
  */
-public class SwingPointTracker extends JPanel implements IrCameraListener {
+public class SwingPointTracker extends JPanel implements FingerListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5847175429104608669L;
 
 	/**
 	 * The points we've seen as of the last update. The Wiimote has 4 "slots"
 	 * that it uses to report IR points.
 	 */
-	private IrPoint[] points = new IrPoint[4];
+	private Finger[] points = new Finger[PointType.NUMBER_OF_FINGERS];
 
 	/**
 	 * Maximum X coordinate.
@@ -58,7 +66,7 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 		this.setBackground(Color.BLACK);
 
 		for (int i = 0; i < 4; ++i) {
-			points[i] = new IrPoint();
+			points[i] = new Finger();
 		}
 	}
 
@@ -80,14 +88,13 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 
 		g.setColor(Color.GRAY);
 		g.drawRect(0, 0, 1024, 768);
-		g.setColor(Color.RED);
-		g.fillOval(points[0].x, yAdjust - points[0].y, 10, 10);
-		g.setColor(Color.GREEN);
-		g.fillOval(points[1].x, yAdjust - points[1].y, 10, 10);
-		g.setColor(Color.BLUE);
-		g.fillOval(points[2].x, yAdjust - points[2].y, 10, 10);
-		g.setColor(Color.ORANGE);
-		g.fillOval(points[3].x, yAdjust - points[3].y, 10, 10);
+
+		for (Finger f : points) {
+			if (f.getType().hasPosition()) {
+				g.setColor(f.getType().color);
+				g.fillOval((int) Math.round(f.x), (int) Math.round(yAdjust - f.y), 10, 10);
+			}
+		}
 
 		// paint corners for CalibrationUI
 		g.setColor(Color.MAGENTA);
@@ -103,12 +110,12 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 	 */
 	public void irImageChanged(IrCameraEvent evt) {
 		for (int i = 0; i < 4; ++i) {
-			points[i] = evt.getIrPoint(i);
+			// points[i] = evt.getIrPoint(i);
 		}
 		repaint();
 	}
 
-	public IrPoint[] getPointArray() {
+	public Finger[] getPointArray() {
 		return points;
 	}
 
@@ -140,6 +147,11 @@ public class SwingPointTracker extends JPanel implements IrCameraListener {
 
 	public boolean isMapVisible() {
 		return showMap;
+	}
+
+	public void fingerChanged(FingerEvent evt) {
+		points = evt.getFingers();
+		repaint();
 	}
 
 }

@@ -12,15 +12,16 @@ import motej.request.ReportModeRequest;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import wiitracker.fingertracking.IrCameraNotifier;
+import wiitracker.fingertracking.FingerNotifier;
 import wiitracker.ui.CalibrationUI;
 import wiitracker.ui.MoteFinderUI;
 import wiitracker.ui.PointTrackerUI;
 
 public class Driver {
 
-	private static IrCameraNotifier pipeline;
+	private static FingerNotifier pipeline;
 	private static Mote mote;
+
 	public static void enableMote(Mote mote) {
 		try {
 			// Turn on the Wiimote IR camera.
@@ -31,7 +32,7 @@ public class Driver {
 			// sensitivity.
 			Driver.mote = mote;
 			boolean[] playerLeds = { true, false, false, true };
-			
+
 			mote.setPlayerLeds(playerLeds);
 			mote.enableIrCamera(IrCameraMode.FULL, IrCameraSensitivity.values()[1]);
 
@@ -41,13 +42,11 @@ public class Driver {
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
 
 			pipeline = PipelineFactory.createPipe(mote);
-			
-			// initialize CalibrationUI 
+
+			// initialize CalibrationUI
 			CalibrationUI calui = new CalibrationUI(mote, pipeline);
 			calui.setVisible(true);
 			calui.pack();
-
-			
 
 		} catch (RuntimeException ex) {
 			System.err.println("A bad thing done happened.");
@@ -57,7 +56,7 @@ public class Driver {
 
 	public static void startPointTrackerUI(CalibrationUI calui, Point2D[] corners) {
 		// Start the Swing UI.
-		
+
 		PointTrackerUI ui = new PointTrackerUI(mote, pipeline, corners);
 		ui.setVisible(true);
 		calui.setVisible(false);
