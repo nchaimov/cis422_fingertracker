@@ -40,8 +40,8 @@ public class Driver {
 			// to communicate with us. Report 3E is needed to get Full reports
 			// from the IR camera.
 			mote.setReportMode(ReportModeRequest.DATA_REPORT_0x3e);
-
 			pipeline = PipelineFactory.createPipe(mote);
+
 
 			// initialize CalibrationUI
 			CalibrationUI calui = new CalibrationUI(mote, pipeline);

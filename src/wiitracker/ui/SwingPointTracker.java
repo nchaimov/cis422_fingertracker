@@ -121,9 +121,14 @@ public class SwingPointTracker extends JPanel implements FingerListener {
 	public Finger[] getPointArray() {
 		return points;
 	}
-
-	// paint the selected corners of the map onto the screen for reference
-	// during calibration
+/**
+ * paint the selected corners of the map onto the screen for reference during calibration
+ * @param increase
+ * 		Boolean for if point was added or removed.
+ * @param p
+ * 		Holds the corner points
+ */
+	
 	public void updateCalibrationPoints(boolean increase, Stack<IrPoint> p) {
 		if (increase) {
 			if (cornerindex < 4) {

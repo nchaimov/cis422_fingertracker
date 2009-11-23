@@ -176,7 +176,11 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 		pipeline.addFingerListener(tracker);
 		m.addMoteDisconnectedListener(this);
 	}
-
+/**
+ * Check that 4 points have been entered. If true adds them to the pointarray.
+ * @param stack
+ * 		Holds the corner points.
+ */
 	public void sendData(Stack<IrPoint> stack) {
 		if (pointStack.size() < 4) {
 			JOptionPane.showMessageDialog(this, pointStack.size() + " points have been entered\n"
@@ -191,7 +195,9 @@ public class CalibrationUI extends JFrame implements MoteDisconnectedListener {
 			finished = true;
 		}
 	}
-
+/**
+ * Displays error when the wii remote gets disconnected.
+ */
 	public void moteDisconnected(MoteDisconnectedEvent evt) {
 		JOptionPane.showMessageDialog(this,
 				"The finger tracking software has lost its connection to the Wiimote!",
