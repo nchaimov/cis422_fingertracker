@@ -3,7 +3,12 @@ package wiitracker.fingertracking;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
-public class Finger extends Double implements Cloneable {
+/**
+ * Wraps Point2D.Double with a point type enumerator, labeling it as one of potentially several 
+ * @author areinder
+ *
+ */
+public class Finger extends Point2D.Double implements Cloneable {
 	PointType type = PointType.UNKNOWN;
 	public Finger() {
 		// TODO Auto-generated constructor stub

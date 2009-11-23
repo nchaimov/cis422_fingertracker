@@ -5,12 +5,26 @@ import java.awt.geom.Point2D;
 import javax.swing.event.EventListenerList;
 
 import org.apache.log4j.Logger;
-
+/**
+ * 
+ * Labels the fingers based on the distance between the points and assumptions about the shape of the hand.
+ * ONLY WORKS for the first four fingers on one hand. Works equally well on either hand.
+ * 
+ * Assumptions don't necessarily hold true if hand is not relatively flat.
+ * @author areinder
+ *
+ */
 public class FingerLabeler implements FingerListener, FingerNotifier {
 	private final Logger log = Logger.getLogger(this.getClass());
-	
+	PointType[] order = new PointType[4]; // order[i] is the number of the finger corresponding to the point i.
 	EventListenerList listenerList = new EventListenerList();
 	boolean doLabel;
+	
+	public FingerLabeler()
+	{
+		for (PointType type : order)
+			type = PointType.UNKNOWN;
+	}
 
 	// Finger[] fingers = new Finger[4];
 
@@ -19,7 +33,7 @@ public class FingerLabeler implements FingerListener, FingerNotifier {
 		log.debug("Processing a finger event");
 		
 		doLabel = true;
-		PointType[] order = new PointType[4]; // order[i] is the number of the finger corresponding to the point i.
+		
 		Finger[] in = evt.getFingers();
 		
 		for (int i = 0; i < 4; i++) {
@@ -70,7 +84,7 @@ public class FingerLabeler implements FingerListener, FingerNotifier {
 		else {
 			for (int i = 0; i < PointType.NUMBER_OF_FINGERS; i++)
 			{
-				if (order[i] != null && order[i].value >= 0) in[i].setType(order[i]);
+				if (order[i] != null && order[i].isKnown()) in[i].setType(order[i]);
 			}
 
 		}
