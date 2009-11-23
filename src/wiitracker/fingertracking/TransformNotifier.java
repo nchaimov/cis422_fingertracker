@@ -63,6 +63,7 @@ public class TransformNotifier implements FingerListener, FingerNotifier {
 	 * @param fromMote 	Point2D data from the camera for the four corners.
 	 * @param fromMap	Pixel locations for the four corners.
 	 */
+	
 	public void setTransform(Point2D[] fromMote, Point2D[] fromMap) {
 		this.setTransform(PerspectiveTransform.getQuadToQuad(
 				fromMote[0].getX(), fromMote[0].getY(),
@@ -91,16 +92,18 @@ public class TransformNotifier implements FingerListener, FingerNotifier {
 		return newPoints;
 	}
 	
-	
+	/**
+	 * Adds a FingerListener to be notified.
+	 */
 	public void addFingerListener(FingerListener listener) {
 		listenerList.add(FingerListener.class, listener);
 	}
 	
+	/**
+	 * Returns the single instance of the TransformNotifier class.
+	 * @return
+	 */
 	public static TransformNotifier getInstance() {
 		return INSTANCE;
-	}
-	
-	public static void update() {
-		
 	}
 }

@@ -8,7 +8,10 @@ public class FingerEvent {
 
 		Finger[] fingers = new Finger[PointType.NUMBER_OF_FINGERS];
 		ArrayList <Finger> unknowns = new ArrayList <Finger>();
-		
+		/**
+		 * Makes a new event, containing all the points from the array. Can hold up to one of each known type.
+		 * @param inFingers
+		 */
 		public FingerEvent(Finger[] inFingers) {
 			for (Finger finger : inFingers)	{
 				//if (finger.getType() == PointType.UNKNOWN) unknowns.add(finger);
@@ -18,6 +21,11 @@ public class FingerEvent {
 			}
 		}
 
+		/**
+		 * Returns the finger corresponding to any PointType fingerType.isKnown() is true.
+		 * @param fingerType - The type of the finger requested.
+		 * @return A Finger, of type fingerType, if fingerType.isKnown. Otherwise, returns null
+		 */
 		public Finger getFinger(PointType fingerType) {
 			Finger outFinger = fingers[fingerType.value];
 			if (fingerType.isKnown() && outFinger.getType() != null) 
@@ -25,14 +33,18 @@ public class FingerEvent {
 			return null;
 		}
 		
-		
+		/**
+		 * Gets all unlabeled, on-screen points from the event.
+		 * 
+		 * @return
+		 */
 		public Finger[] getUnknowns() {
 			return unknowns.toArray(new Finger[0]);
 		}
 
 		
 		/**
-		 * Returns an array of 
+		 * Returns an array containing all on-screen points from the event.
 		 * @return The array of points.
 		 */
 		public Finger[] getFingers()

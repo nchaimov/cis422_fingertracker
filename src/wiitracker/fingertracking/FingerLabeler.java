@@ -27,13 +27,13 @@ public class FingerLabeler implements FingerListener, FingerNotifier {
 	}
 
 	// Finger[] fingers = new Finger[4];
-
+	/**
+	 * 	Implements fingerChanged. The object keeps track of points that are still labeled, and labels points when all are visible.
+	 */
 	public void fingerChanged(FingerEvent evt) {
 		
 		log.debug("Processing a finger event");
-		
 		doLabel = true;
-		
 		Finger[] in = evt.getFingers();
 		
 		for (int i = 0; i < 4; i++) {
@@ -105,7 +105,9 @@ public class FingerLabeler implements FingerListener, FingerNotifier {
 		return (float) Math.sqrt(Math.pow(a.getX() - b.getX(), 2)
 				+ Math.pow(a.getY() - b.getY(), 2));
 	}
-
+/**
+ * 	Adds a listener for FingerEvent events.
+ */
 	public void addFingerListener(FingerListener listener) {
 		listenerList.add(FingerListener.class, listener);
 	}

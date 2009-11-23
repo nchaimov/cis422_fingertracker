@@ -4,18 +4,21 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 /**
- * Wraps Point2D.Double with a point type enumerator, labeling it as one of potentially several 
+ * Wraps Point2D.Double with a point type enumerator. This lets off-screen points be labeled as such before TransformNotifier modifies them.
+ * 
+ * All constructors act like their counterpoints, and set type = t if applicable.
  * @author areinder
  *
  */
 public class Finger extends Point2D.Double implements Cloneable {
 	PointType type = PointType.UNKNOWN;
 	public Finger() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	public Finger(double arg0, double arg1) {
 		super(arg0, arg1);
+		type = null;
 	}
 	
 	public Finger(double arg0, double arg1, PointType t) {
@@ -50,6 +53,6 @@ public class Finger extends Point2D.Double implements Cloneable {
 	
 	@Override
 	public String toString() {
-		return "" + type.toString() + " (" + this.x + ", " + this.y + ")";
+		return "" + type.toString() + " (" + this.x + ", " + this.y + ") : " + type.toString();
 	}
 }
