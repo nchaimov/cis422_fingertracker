@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build-all" name="Group7">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../Developer/Applications/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.5"/>
+    <property name="source" value="1.5"/>
+    <path id="Group7.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/bluecove-2.1.0.jar"/>
+        <pathelement location="lib/slf4j-api-1.5.8.jar"/>
+        <pathelement location="lib/TableLayout-bin-jdk1.5-2009-08-26.jar"/>
+        <pathelement location="lib/TableLayout-javadoc-2009-08-26.jar"/>
+        <pathelement location="lib/TableLayout-src-2009-08-26.jar"/>
+        <pathelement location="lib/TableLayoutBuilders-all-jdk1.5-2009-08-26.jar"/>
+        <pathelement location="lib/TableLayoutExtensions-all-jdk1.5-2009-08-26.jar"/>
+        <pathelement location="lib/log4j-1.2.15.jar"/>
+        <pathelement location="lib/slf4j-log4j12-1.5.8.jar"/>
+    </path>
+	<target name="build-all" depends="build,create_run_jar,javadoc">
+		<echo message="Built" />
+	</target>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="Group7.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="Driver">
+        <java classname="wiitracker.driver.Driver" failonerror="true" fork="yes">
+            <jvmarg line="-d32"/>
+            <classpath refid="Group7.classpath"/>
+        </java>
+    </target>
+    <target name="MoteFinderUI">
+        <java classname="wiitracker.ui.MoteFinderUI" failonerror="true" fork="yes">
+            <jvmarg line="-d32"/>
+            <classpath refid="Group7.classpath"/>
+        </java>
+    </target>
+
+    <target name="create_run_jar" depends="build">
+        <jar destfile="/Users/nchaimov/tablet_workspace/Group7/WiiFingerTracker.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="wiitracker.driver.Driver"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ bluecove-2.1.0.jar slf4j-api-1.5.8.jar TableLayout-bin-jdk1.5-2009-08-26.jar TableLayout-javadoc-2009-08-26.jar TableLayout-src-2009-08-26.jar TableLayoutBuilders-all-jdk1.5-2009-08-26.jar TableLayoutExtensions-all-jdk1.5-2009-08-26.jar log4j-1.2.15.jar slf4j-log4j12-1.5.8.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="/Users/nchaimov/tablet_workspace/Group7/bin"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="bluecove-2.1.0.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="slf4j-api-1.5.8.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayout-bin-jdk1.5-2009-08-26.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayout-javadoc-2009-08-26.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayout-src-2009-08-26.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayoutBuilders-all-jdk1.5-2009-08-26.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayoutExtensions-all-jdk1.5-2009-08-26.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="log4j-1.2.15.jar"/>
+            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="slf4j-log4j12-1.5.8.jar"/>
+        </jar>
+    </target>
+	
+	<target name="javadoc">
+        <javadoc access="protected" author="true" classpath="lib/TableLayoutExtensions-all-jdk1.5-2009-08-26.jar:lib/slf4j-log4j12-1.5.8.jar:lib/TableLayout-javadoc-2009-08-26.jar:lib/slf4j-api-1.5.8.jar:lib/log4j-1.2.15.jar:lib/bluecove-2.1.0.jar:lib/TableLayout-bin-jdk1.5-2009-08-26.jar:lib/TableLayoutBuilders-all-jdk1.5-2009-08-26.jar:lib/TableLayout-src-2009-08-26.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="wiitracker.output,wiitracker.motefinder,wiitracker.fingertracking,wiitracker.ui,wiitracker.driver" source="1.5" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+
+
+</project>
