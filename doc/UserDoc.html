@@ -1,0 +1,350 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Finger Tracker User Documentation</title>
+
+<style type="text/css">
+body {
+	text-align:center;
+	margin: 0px;
+	padding: 10px 0px 0px;
+	font-family:Arial,Helvetica,serif;
+	font-size:12px;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:18px;
+}
+
+h1, h2, h3, h4, h5, h6, caption {
+	font-family:Arial,Helvetica,serif;
+}
+
+h1 {
+	font-size:1.65em;
+}
+
+#container {
+	margin: auto;
+	padding: 0px;
+}
+
+#header	{
+	text-align: left;
+}
+
+#header-w {
+	font-family:Verdana,sans-serif;
+	background: #003E0F;
+	padding-left: 13px;
+	padding-top: 12px;
+}
+
+#header div.header-custom-banner {
+	text-align: left;
+}
+
+#header div.header-custom-banner {
+	color: #FDD017;
+	font-size: 2.1em;
+	margin:5px 0 0;
+	padding:5px 0 15px;
+}
+
+#header a:link, #header a:visited {
+	color: #FDD017;
+	text-decoration: none;
+}
+
+h1.header-w {
+	color:#347C17;
+	padding-bottom:15px;
+}
+
+h1 div#space-role {
+	color:#FDD017;
+	float:left;
+	font-size:small;
+	font-weight:normal;
+	text-align:right;
+	text-transform:none;
+	white-space:nowrap;
+}
+
+#doc-name {
+	border-bottom:3px solid #C6D3E1;
+	padding-bottom:5px;
+	width:100%;
+}
+
+#data {
+	text-align: left;
+	margin: 1.5em 3em 3em;
+}
+
+p {
+	margin-bottom:0.75em;
+}
+
+blockquote {
+	font-style:italic;
+	margin-bottom:0.75em;
+	margin-left:3em;
+}
+
+a:link, a:visited {
+	color:#15478C;
+	padding:1px 0;
+	text-decoration:underline;
+}
+
+code {
+	background:#F7F7F7 none repeat scroll 0 0;
+	border:1px solid #DCDCDC;
+	padding:0.1em 0.375em;
+}
+
+#doclogo {
+	margin-left: 100px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+table {
+	border-bottom:1px solid #D4DCE8;
+	border-collapse:collapse;
+	border-top:1px solid #D4DCE8;
+	margin-bottom:0.75em;
+	width:100%;
+}
+
+table th {
+	background:#EAF3FA none repeat scroll 0 0;
+	color:#333333;
+	font-size:1em;
+	font-weight:bold;
+	height:21px;
+	padding:0.2em 0.5em;
+	text-align:left;
+}
+
+table td {
+	border-bottom:1px solid #EEEEEE;
+	padding:0.375em 0.5em;
+	text-align:left;
+	vertical-align:top;
+}
+
+pre {
+	background:#F8F8F8 none repeat scroll 0 0;
+	border:1px dashed #DCDCDC;
+	margin:1.25em 0;
+	overflow:auto;
+	padding:0.375em;
+}
+
+div {
+ margin-top: 0px;
+ margin-bottom: 0px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="header">
+		<div id="header-w">
+		   <div class="header-custom-banner clear-float"><a class="header-text" href="http://www.cs.uoregon.edu">CIS 422/522 Project</a></div>
+			<h1 class="header-w clear-float">
+			  <span>Analysis of Tactile Map Reading</span>
+			  <span> - <i>Documentation</i></span>
+			</h1>
+		</div>
+	</div>
+
+	<div id="data">
+
+		<div id="doc-name">
+			<h2>Wiimote Finger Tracker - User Documentation</h2>
+		</div>
+
+		<p><b>&nbsp;</b><strong><font size="2">Project Description</font></strong></p>
+
+		<blockquote>
+			<div class="Section1"><span style="font-style: normal">Analysis of Tactile Map Reading (ATMR) is a software project from CIS 410/523 (Spring 09) and CIS 422/522 (Fall 09) classes in the Computer &amp; Information Science Department at University of Oregon.
+
+The Wiimote Finger Tracker is a sub-project designed to track and store coordinate data of Infrared LED light in real time. When combined with a device that emits IR light from the position of the fingertip of the user, this program is able to track the position of up to four fingers. The goal of the overall project is to help researchers analyze the behaviors of blind users while reading tactile maps. The Wiimote project could also be used for low-cost real-time interactive applications. The Wiimote Finger Tracker sends coordinate and timestamp data to an XML file which can be used to easily extract and analyze the data.</span></div>
+			<p><span style="font-style: normal"><font size="2">The following features are included:</font></span></p>
+			<ul type="disc">
+				<li><span style="font-style: normal"><font size="2">Mote Finder: Searches for bluetooth devices in the area and determines which addresses correspond to Wii remotes. Allows the user to input a Bluetooth address to directly connect to a Wii remote.  				</font> 
+				</span></li>
+                <li><span style="font-style: normal"><font size="2">Calibration UI: Allows the user to store tactile map corner point data in the program for coordinate transformation. Coordinate transformatioin corrects for distorted viewing angles, making coordinates relative to the map. This allows the software to correctly track points relative to a physical map even when the Wii remote is not mounted diectly above the map.
+                 <ul type="circle">
+                    <li><span style="font-style: normal"><font size="2">The &quot;Add Point&quot; button adds a point with location equal to the index finger's location to the point stack. The &quot;Remove Point&quot; button removes the previously added point from the stack. 
+                    </font> 
+                    </span></li>
+                    <li><span style="font-style: normal"><font size="2">The &quot;Done&quot; button ends the calibration stage by storing the corner point data, closing the Calibration window, and opening the Finger Tracker window.
+                    </font> 
+                    </span></li>
+                    </ul>
+
+				</font> 
+				</span></li>
+				<li><span style="font-style: normal"><font size="2">FingerTracking UI: Allows the user to see the tracked points on a visual display, set the sensitivity of the Wiimote IR camera, and control when to start storing data to an XML file.
+                    <ul type="circle">
+                    <li><span style="font-style: normal"><font size="2">Sensitivity Settings: Level 1 is the most sensitive of all official Wiimote sensitivity settings, while Level 5 is the least sensitive. The &quot;Inio&quot; button is the default sensitivity setting and is a higher sensitivity than the official Level 1.
+                    </font> 
+                    </span></li>
+                    <li><span style="font-style: normal"><font size="2">XML Controller. Press &quot;XML Start&quot; to begin writing data to the XML file. Press the button again (now shown as &quot;XML Stop&quot;) to stop writing data to the XML file.
+                    </font> 
+                    </span></li>
+                    </ul>
+				</font> 
+				</span></li>
+				<li><span style="font-style: normal"><font size="2">IR Tracking: Can track up to four points. Currently cannot distinguish which point corresponds to which finger. 
+				</font> 
+				</span></li>
+				<li><span style="font-style: normal"><font size="2">Output result as 
+				an xml file: Outputs the extracted coordinate data, time stamps, point IDs.
+				</font> 
+				</span></li>
+			</ul>
+		</blockquote>
+
+<p>&nbsp;</p>
+
+<p><strong><font size="2">System Requirement</font></strong></p>
+
+		<blockquote>
+			<p><span style="font-style: normal"><font size="2">CPU: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Intel Pentium III (or better)<br/>
+
+RAM:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 128MB <br />
+
+Disk Space: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50MB free storage space<br/>
+
+OS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;Windows XP (with Widcomm bluetooth stack only), Mac OS X<br/>
+
+Software: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JRE 1.6 (or higher)<br/>
+
+Bluetooth: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bluetooth 2.0 device (or better) using Widcomm, Bluez, or Bluesoleil stack
+
+</font></span></p>
+		</blockquote>
+
+<p>&nbsp;</p>
+
+<p><strong><font size="2">Getting Started</font></strong></p>
+
+		<font SIZE="2">
+		<blockquote>
+            <p ALIGN="LEFT"><span style="font-style: normal">1. Open the executable, WiiFingerTracker.jar. Take the Wiimote and hold down the &quot;1&quot; and &quot;2&quot; buttons located at the bottom of the Wiimote. This makes the Wiimote "discoverable" by the software.</span></p>
+
+			<p ALIGN="LEFT"><span style="font-style: normal">2. Press &quot;Start Searching&quot; to search for the Wiimote, or press &quot;Add by Address&quot; to manually enter a Wiimote bluetooth address. Once the software is able to detect the Wii remote, its MAC address will appear in the list of known remotes. Select an address and press the &quot;Connect&quot; button while still holding the &quot;1&quot; and &quot;2&quot; buttons. When the calibration window appears, you may release the buttons. </span></p>
+            
+            <p ALIGN="LEFT"><span style="font-style: normal">3. Attach the IR glove device to the hand of the subject/user and connect the battery.</span></p>
+            
+            <p ALIGN="LEFT"><span style="font-style: normal">4. Mount the Wiimote at a distance of approximately 1 meter above the IR glove device with the camera pointed towards the physical map.  Multicolored dots should appear on the screen at positions corresponding to detected IR light.</span></p>
+            
+            <p ALIGN="LEFT"><span style="font-style: normal">5. The project window will open the Calibration window. In this window we identify the corners of the physical map in clockwise or counter-clockwise order. The subject wearing the glove will move his or her index finger to a corner of the physical map. Add this point to the calibration by pressing the &quot;Set Point&quot; button while the index finger is pointed at a corner. If a point is entered incorrectly and needs to be removed, pressing the &quot;Remove Point&quot; button will remove the most recently added point. Continue adding points in clockwise or counter-clockwise order until all four corners of the physical map are accounted for and press the &quot;Done&quot; button to continue.</span></p>          
+            
+            <p ALIGN="LEFT"><span style="font-style: normal">6. The project window will open the Point Tracker window. There are 7 buttons on the bottom menu which control the sensitivity of the IR camera, although the default option will work for most cases. The far right button, &quot;XML Start&quot;, controls the XML writer. </span></p>
+
+
+			<p ALIGN="LEFT"><span style="font-style: normal">7. Click the &quot;XML Start&quot; button to start writing data to the XML file. To stop writing, click the button again.</span></p>
+
+			
+
+		</blockquote>
+		</font>
+		<p>&nbsp;</p>
+		<p><strong><span style="background-color: #ffffff;"><font size="2">XML file</font> </span></strong></p>
+
+		<blockquote>
+			<p><span style="background-color: #ffffff; font-style:normal">
+<span style="font-style: normal"><font size="2">Every time the Wiimote updates the program with a new set of points, the coordinate data of those points is sent to the XML file. (If a point is not detected, the coordinates of that point are printed in the negative range)
+			The format of the xml file is as shown below. In the root element, the 
+			StartDateTime is the time when the processing begins. Each element 
+			&quot;event&quot; contains the position of one finger in the frame. It has 
+			four attributes: FingerID, time, and x-y dimensions. The time means 
+			the timestamp in ms of each frame.</font></span><blockquote> 
+				<p><font size="2">&nbsp;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</font></p>
+				<p><font size="2">&nbsp;&lt;coordStream StartDateTime=&quot;2009-05-25T10:24:10.953-0700&quot;&gt;</font></p>
+				<p><font size="2">&lt;event fingerID=&quot;1&quot; time=&quot;14257&quot; X=&quot;521&quot; Y=&quot;289&quot; /&gt;</font></p>
+				<p><font size="2">&lt;event fingerID=&quot;2&quot; time=&quot;14257&quot; X=&quot;519&quot; Y=&quot;225&quot; /&gt;</font></p>
+				<p><font size="2">&nbsp;&nbsp;&nbsp; ...</font></p>
+				<p><font size="2">&lt;/coordStream&gt;</font></p>
+			</blockquote>
+
+
+			
+		</blockquote>
+
+<p><font size="2">&nbsp;</font></p>
+
+<p><strong><font size="2">Trouble Shooting</font></strong></p>
+
+<p style="padding-left: 30px;"><strong><font size="2">Problem:</font></strong><font size="2"> Wiimote cannot detect IR light</font></p>
+
+<p style="padding-left: 30px;"><font size="2">Solution:</font></p>
+
+<blockquote> 
+<p style="padding-left: 30px;"><span style="font-style: normal">
+<font size="2">1. By default, the Wiimote sensitivity is set to 1. (the lowest sensitivity) Try adjusting the sensitivity or the distance between the Wiimote and the IR device until points appear on the display. </font></span></p>
+
+<p style="padding-left: 30px;"><span style="font-style: normal">
+<font size="2">2. Make sure that the battery is connected to the IR device and that all IR LEDs are unobstructed.</font></span></p>
+
+<p style="padding-left: 30px;"><span style="font-style: normal">
+<font size="2">3. If it still doesn't work, email <a href="mailto:happygilmore3857@comcast.net">happygilmore3857@comcast.net</a>.</font></span></p>
+</blockquote>
+
+
+<p style="padding-left: 30px;"><strong><font size="2">Problem:</font></strong><font size="2"> Exception is thrown at program startup (&quot;stack name&quot; stack is not supported</font></p>
+
+<p style="padding-left: 30px;"><font size="2">Solution:</font></p>
+
+<blockquote> 
+<p style="padding-left: 30px;"><span style="font-style: normal">
+<font size="2">1. Currently, the JSR82 emulator, bluecove, only supports Widcomm, Bluez, and Bluesoleil Bluetooth stacks, (supports Winsock, the microsoft stack, in rare circumstances) therefore, the program must be run on a computer that uses one of these stacks.</font></span></p>
+
+<p style="padding-left: 30px;"><span style="font-style: normal">
+<font size="2">2. If the computer does not use one of the aforementioned stacks, a Bluetooth radio device that does use one of the working stacks may be installed on the computer and used to connect to the Wiimote</font></span></p>
+
+<p style="padding-left: 30px;"><span style="font-style: normal">
+<font size="2">3. If it still doesn't work, email <a href="mailto:happygilmore3857@comcast.net">happygilmore3857@comcast.net</a>.</font></span></p>
+</blockquote>
+
+
+		<p style="line-height: 100%; margin-bottom: 0"><strong>
+		<span style="font-size: 9pt"><br><br>Programmers</span></strong><blockquote>
+			<font SIZE="2">
+<p ALIGN="LEFT"><span style="font-style: normal">
+Matt Bintz(<u><a href="mailto:bintz2000@hotmail.com" style="color: #15478C; text-decoration: underline; padding-left: 0; padding-right: 0; padding-top: 1px; padding-bottom: 1px">bintz2000@hotmail.com</a></u>)</span></p>
+			
+<p ALIGN="LEFT"><span style="font-style: normal">
+Nicholas Chaimov(<u><a href="mailto:nchaimov@uoregon.edu" style="color: #15478C; text-decoration: underline; padding-left: 0; padding-right: 0; padding-top: 1px; padding-bottom: 1px">nchaimov@uoregon.edu</a></u>)</span></p>
+			
+<p ALIGN="LEFT"><span style="font-style: normal">
+Thomas Gilmore(<u><a href="mailto:happygilmore3857@comcast.net" style="color: #15478C; text-decoration: underline; padding-left: 0; padding-right: 0; padding-top: 1px; padding-bottom: 1px">happygilmore3857@comcast.net</a></u>)</span></p>
+			
+<p ALIGN="LEFT"><span style="font-style: normal">
+Andrew Reinder(<u><a href="mailto:areinder@uoregon.edu" style="color: #15478C; text-decoration: underline; padding-left: 0; padding-right: 0; padding-top: 1px; padding-bottom: 1px">areinder@uoregon.edu</a></u>)</span></p>
+			
+<p ALIGN="LEFT"><span style="font-style: normal">
+Nan Shan(<u><a href="mailto:nshan@uoregon.edu" style="color: #15478C; text-decoration: underline; padding-left: 0; padding-right: 0; padding-top: 1px; padding-bottom: 1px">nshan@uoregon.edu</a></u>)</span></p>			</font>
+			<p style="padding-left: 30px;">&nbsp;</p>
+		</blockquote>
+
+	</div>
+
+</div>
+<p style="padding-left: 30px">&nbsp;</p>
+</body>
+</html>
