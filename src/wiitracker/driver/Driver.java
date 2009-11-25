@@ -22,6 +22,10 @@ public class Driver {
 	private static FingerNotifier pipeline;
 	private static Mote mote;
 
+	/**
+	 * Initializes the Mote object for the program.
+	 * @param mote The Mote object corresponding to the connected device.
+	 */
 	public static void enableMote(Mote mote) {
 		try {
 			// Turn on the Wiimote IR camera.
@@ -54,6 +58,11 @@ public class Driver {
 		}
 	}
 
+	/**
+	 * Starts the PointTrackerUI and displays it on-screen.
+	 * @param calui The CalibrationUI window that handles calibrating to the map's corners.
+	 * @param corners The array of corners from the map.
+	 */
 	public static void startPointTrackerUI(CalibrationUI calui, Point2D[] corners) {
 		// Start the Swing UI.
 
@@ -63,6 +72,10 @@ public class Driver {
 		ui.pack();
 	}
 
+	/**
+	 * Displays an error dialog when connection fails.
+	 * @param parent The component effecting the error.
+	 */
 	public static void errorPopup(Component parent) {
 		JOptionPane.showMessageDialog(parent, "Bluetooth Device is not ready", "Bluetooth Error",
 				JOptionPane.ERROR_MESSAGE);

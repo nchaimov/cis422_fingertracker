@@ -4,7 +4,7 @@ import java.awt.Color;
 
 /**
  * 
- * Contains information accompanying Finger points.
+ * Contains information accompanying Finger points, including a value, color, and the name of the finger.
  * @author areinder
  *
  */
@@ -24,10 +24,18 @@ public enum PointType {
 		this.name = name;
 	}
 
+	/**
+	 * 
+	 * @return True if the point is labeled as a particular finger, and false otherwise.
+	 */
 	public boolean isKnown() {
 		return value >= 0;
 	}
 
+	/**
+	 * True if the point is on-screen. If false, position information does not carry relevant information.
+	 * @return
+	 */
 	public boolean hasPosition() {
 		return value > OFF_SCREEN.value;
 	}
