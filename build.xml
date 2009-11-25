@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build-all" name="Group7">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../Developer/Applications/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.5"/>
     <property name="source" value="1.5"/>
@@ -70,7 +69,7 @@
     </target>
 
     <target name="create_run_jar" depends="build">
-        <jar destfile="/Users/nchaimov/tablet_workspace/Group7/WiiFingerTracker.jar">
+        <jar destfile="WiiFingerTracker.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="wiitracker.driver.Driver"/>
@@ -78,16 +77,16 @@
                 <attribute name="Rsrc-Class-Path" value="./ bluecove-2.1.0.jar slf4j-api-1.5.8.jar TableLayout-bin-jdk1.5-2009-08-26.jar TableLayout-javadoc-2009-08-26.jar TableLayout-src-2009-08-26.jar TableLayoutBuilders-all-jdk1.5-2009-08-26.jar TableLayoutExtensions-all-jdk1.5-2009-08-26.jar log4j-1.2.15.jar slf4j-log4j12-1.5.8.jar"/>
             </manifest>
             <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="/Users/nchaimov/tablet_workspace/Group7/bin"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="bluecove-2.1.0.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="slf4j-api-1.5.8.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayout-bin-jdk1.5-2009-08-26.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayout-javadoc-2009-08-26.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayout-src-2009-08-26.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayoutBuilders-all-jdk1.5-2009-08-26.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="TableLayoutExtensions-all-jdk1.5-2009-08-26.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="log4j-1.2.15.jar"/>
-            <zipfileset dir="/Users/nchaimov/tablet_workspace/Group7/lib" includes="slf4j-log4j12-1.5.8.jar"/>
+            <fileset dir="bin"/>
+            <zipfileset dir="lib" includes="bluecove-2.1.0.jar"/>
+            <zipfileset dir="lib" includes="slf4j-api-1.5.8.jar"/>
+            <zipfileset dir="lib" includes="TableLayout-bin-jdk1.5-2009-08-26.jar"/>
+            <zipfileset dir="lib" includes="TableLayout-javadoc-2009-08-26.jar"/>
+            <zipfileset dir="lib" includes="TableLayout-src-2009-08-26.jar"/>
+            <zipfileset dir="lib" includes="TableLayoutBuilders-all-jdk1.5-2009-08-26.jar"/>
+            <zipfileset dir="lib" includes="TableLayoutExtensions-all-jdk1.5-2009-08-26.jar"/>
+            <zipfileset dir="lib" includes="log4j-1.2.15.jar"/>
+            <zipfileset dir="lib" includes="slf4j-log4j12-1.5.8.jar"/>
         </jar>
     </target>
 	
