@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Finger Tracker Technical Documentation</title>
+
+<style type="text/css">
+body {
+	text-align:center;
+	margin: 0px;
+	padding: 10px 0px 0px;
+	font-family:Arial,Helvetica,serif;
+	font-size:12px;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:18px;
+}
+
+h1, h2, h3, h4, h5, h6, caption {
+	font-family:Arial,Helvetica,serif;
+}
+
+h1 {
+	font-size:1.65em;
+}
+
+#container {
+	margin: auto;
+	padding: 0px;
+}
+
+#header	{
+	text-align: left;
+}
+
+#header-w {
+	font-family:Verdana,sans-serif;
+	background: #003E0F;
+	padding-left: 13px;
+	padding-top: 12px;
+}
+
+#header div.header-custom-banner {
+	text-align: left;
+}
+
+#header div.header-custom-banner {
+	color: #FDD017;
+	font-size: 2.1em;
+	margin:5px 0 0;
+	padding:5px 0 15px;
+}
+
+#header a:link, #header a:visited {
+	color: #FDD017;
+	text-decoration: none;
+}
+
+h1.header-w {
+	color:#347C17;
+	padding-bottom:15px;
+}
+
+h1 div#space-role {
+	color:#FDD017;
+	float:left;
+	font-size:small;
+	font-weight:normal;
+	text-align:right;
+	text-transform:none;
+	white-space:nowrap;
+}
+
+#doc-name {
+	border-bottom:3px solid #C6D3E1;
+	padding-bottom:5px;
+	width:100%;
+}
+
+#data {
+	text-align: left;
+	margin: 1.5em 3em 3em;
+}
+
+p {
+	margin-bottom:0.75em;
+}
+
+blockquote {
+	font-style:italic;
+	margin-bottom:0.75em;
+	margin-left:3em;
+}
+
+a:link, a:visited {
+	color:#15478C;
+	padding:1px 0;
+	text-decoration:underline;
+}
+
+code {
+	background:#F7F7F7 none repeat scroll 0 0;
+	border:1px solid #DCDCDC;
+	padding:0.1em 0.375em;
+}
+
+#doclogo {
+	margin-left: 100px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+table {
+	border-bottom:1px solid #D4DCE8;
+	border-collapse:collapse;
+	border-top:1px solid #D4DCE8;
+	margin-bottom:0.75em;
+	width:100%;
+}
+
+table th {
+	background:#EAF3FA none repeat scroll 0 0;
+	color:#333333;
+	font-size:1em;
+	font-weight:bold;
+	height:21px;
+	padding:0.2em 0.5em;
+	text-align:left;
+}
+
+table td {
+	border-bottom:1px solid #EEEEEE;
+	padding:0.375em 0.5em;
+	text-align:left;
+	vertical-align:top;
+}
+
+pre {
+	background:#F8F8F8 none repeat scroll 0 0;
+	border:1px dashed #DCDCDC;
+	margin:1.25em 0;
+	overflow:auto;
+	padding:0.375em;
+}
+
+div {
+ margin-top: 0px;
+ margin-bottom: 0px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="header">
+		<div id="header-w">
+		   <div class="header-custom-banner clear-float"><a class="header-text" href="http://www.cs.uoregon.edu">CIS 422/522 Project</a></div>
+			<h1 class="header-w clear-float">
+			  <span>Analysis of Tactile Map Reading</span>
+			  <span> - <i>Documentation</i></span>
+			</h1>
+		</div>
+	</div>
+
+	<div id="data">
+
+		<div id="doc-name">
+			<h2>Wiimote Finger Tracker - Technical Documentation</h2>
+		</div>
+<blockquote>
+<div class="Section1"><span style="font-style: normal">
+<h1> Overview</h1>
+<p>
+<ul>
+<li>
+The design of the system is to be able to track multiple fingers (four fingers) by using wii remote. </li>
+<li>The figure below shows the glove equipped one 12 V battery alone with four LED IR lights on the tip of four fingers.</li>
+<li>The wii remote uses its IR camera to receive all four IR LED light emitted from the four fingers as long as they are not out of range.</li>
+<li>The wii remote captures the locations of each finger and sends the x and y coordinates back to the computer by bluetooth every couple milliseconds.</li>
+<li>The program uses Java language and libraries to be able to recognize the wii remote by its bluetooth (Library BlueCove)</li>
+<li>The movements of the four fingers are captured using the MoteJ Library.This is done in real-time</li>
+<li>The coordinates can be sent to an XML format to be analyzed.</li>
+ </ul>
+ 
+        
+       
+</p>
+<br>
+<h1>System Architecture</h1>
+<img src="diagram.png">
+<p>The system uses the Bluecove library to find and connect to Wii remotes over Bluetooth. The Motej library, an open-source Java library to communicate with the Wiimote, is used to get data from the Wiimote's IR camera. The Wiimote contains an IR camera with a 128x96 pixel monochrome camera behind an IR band-pass filter. Each pixel has 8 subpixels, for a total resolution of 1024x768 when the maximum sensitivity setting is used. The Wiimote has a built-in image processor which extracts the four brightest points visible and reports their position. More information on the sensitivity settings of the Wiimote and the protocols used to communicate with the IR camera can be found at <a href="http://wiibrew.org/wiki/Wiimote">http://wiibrew.org/wiki/Wiimote</a>. 
+<br><br>
+The Motej library is configured to fire events whenever the IR camera detects a change (point appears, point disappears, point moves). The event includes the positions, sizes, and intensities of the four brightest points visible. These events are received by our FingerConverter, which converts the points into a representation as a Finger, which can also include information about which finger the point represents. The FingerConverter then fires FingerEvents, which are received by our TransformNotifier. This uses the Java Advanced Imaging library to project the points from the perspective of the IR camera to the perspective of the flat map over which fingers are being tracker. The TransformNotifier then fires its own FingerEvents, which are received by the FingerLabeler. The FingerLabeler labels fingers based upon their ordering and distance from one another, provided that all four points are visible. If two or more points leave the viewing area, and fewer than all four come back, returning points are labeled as "unknown" until all four points become visible again. Points which do not leave the screen maintain their existing labels.
+<br><br>
+FingerEvents encapsulating labeled Fingers are then sent to the SwingPointTracker, which displays the points as colored dots on the screen over an image of the map, and to the XMLWriter, which writes points out to an XML file.</p>
+<h1>System Requirements</h1>
+<blockquote>
+			<p><span style="font-style: normal"><font size="2">CPU: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Intel Pentium III (or better)<br/>
+
+RAM:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 128MB <br />
+
+Disk Space: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50MB free storage space<br/>
+
+OS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;Windows XP, Mac OS<br/>
+
+Software: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JRE 1.6 (or higher)<br/>
+
+BlueTooth: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlueTooth 2.0 device (or better) using Widcomm, Bluez, or Bluesoleil stack
+
+</font></span></p>
+		</blockquote>
+    <h1> How to run the program</h1>
+    Navigate to the folder with the program and double-click WiiFingerTracker.jar to run it. <br>You can also run the program on the command line by typing java -jar WiiFingerTracker.jar<br> For more information please see the <a href="UserDoc.html">user documentation</a>.
+    <h1>Building</h1>
+    <ul>
+    <li>Hardware - In addition to the Nintendo Wii Remote, the project requires that IR lights be attached to the user's fingers. To accomplish this, we constructed a fingerless glove with IR LEDs attached near the fingertips. To build such a glove, use the instructions located <a href="Parts_for_glove_/index.html">here</a>.</li>
+    <li>Software
+    <ul>
+    <li>Run the command "ant" from the command line while in the root project directory to compile, build the runnable jar, and create or update the javadocs</li>
+    <li>In Eclipse or Netbeans:<br>Make a new project and copy the source files to the project directory depending on how it's structured (src directory or root as src). Add the jar files to the build path, this is mostly done through the properties of the project file. One can now compile and run the program directory is Eclipse or Netbeans.To create a executable jar file just export the project in Eclipse or Netbeans and you will see the option to make a executable jar.</li>
+    </ul>
+    </li>
+    </ul>
+<h1>Directory Structure</h1>
+
+<ul>
+<li>docs: Documentation folder. Contains Javadocs for the project.</li>
+<li>lib: Holds all the library files used by the program as JARs</li>
+
+<li>src: Source folder. Contains source code for the project, and for the Motej library, for which easy access to the source code is desired due to a lack of documentation.</li>
+<li>bin: Class files are stored here when the project is built.
+</li>
+<li>resources: images used by the software
+</li>
+<li>resources/motejx: information used by the Motej library about the types of Wii devices it can connect to.</li>
+</ul>
+Additionally, the following files exist at the root level:
+<br><br>
+motes.list: Contains list of known Wiimote addresses.<br>
+WiiFingerTracker.jar: A runnable JAR file which launches the software.<br>
+log4j.properties: Configures the desired verbosity of logging.<br>
+build.xml: Ant script to build the project.<br>
+jar-in-jar-loader.zip: Used by the Ant script to build the runnable JAR file.
+<br><br>
+It is also possible that a directory called __MACOSX may exist. This is a file used by Mac OS X and included in all ZIP archives created on that operating system. It is not actually part of the project. 
+
+<h1>Packages and Classes</h1>
+<ul>
+<li><b>driver</b>(Package)
+<ul>
+<li>Driver.java - Main program. Starts the MoteFinderUI, when finished starts the CalibrationUI. After gathering corner points of the map, the PointTrackerUI is started.</li>
+<li>PipelineFactory.java - Assembles the transformNotifier and fingerLabeler together into a pipeline.
+</li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li><b> fingertracking</b>(Package)
+<ul>
+<li>FingerLabeler.java - Labels the fingers in the correct order given the IR points from the wii remote.</li>
+<li>IrCameraNotifier.java - Notifier class used by transformNotifier for notifiying all the IR camera listeners</li>
+<li>TransformNotifier.java -  This singleton class wraps the PerspectiveTransform class for detail hiding and to make it fit in the pipeline. PerspectiveTransform creates a projective transform from one plane in space to another. Specifically, since the map is identical to the image, it takes any point from the camera, and returns its location relative to the map.</li>
+<li>Finger.java - Point wrapper where each Finger has a PointType</li>
+<li>FingerEvent.java - Event class describing a finger being moved.</li>
+<li>PointType.java - Enum for the type of finger. The finger can be thumb, index, middle, ring, off screen or unknown(finger labeler can't tell what finger it is)</li>
+<li>FingerListener.java - Interface that extends EventListener to have fingerChanged method that takes care of fingerevents</li>
+<li>FingerConverter.java - Marks points reported at 1023, 1023, the default value, as off-screen. Marks other points as unknown. Wraps the Mote class as a FingerNotifier.</li>
+<li>FingerNotifier.java - Interface for adding FingerListeners.</li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li><b>motefinder</b>(Package)
+<ul>
+<li>MoteAddressFinder.java - Finds the bluetooth address of discoverable wii remotes and returns them as strings.</li>
+<li>MoteAddressFinderListener.java - Extension of EventListener which provides functionality for when a remote is found.(moteFound())
+</li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li><b>output</b>(Package)
+<ul>
+<li>XMLWriter.java - Writes the transformed points to an XML file.</li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li><b>ui</b>(Package)
+<ul>
+<li>MoteFinderUI.java - Creates a UI that searches for discoverable Wii remotes and allows you to connect to them. Also, displays a history of known Wii remotes that you can also connect to.</li>
+<li>PointTrackerUI.java - Creates the UI that displays the four points seen by the Wiimote IR camera after their coordinates are transformed to be relative to the map.</li>
+<li>SwingPointTracker.java - Listens for points sent from the Transformnotifier and draws them on the screen. Also, draws corner points for the CalibrationUI and the map for the PointTrackerUI</li>
+<li>CalibrationUI - Creates a window for gathering the corners of the map. Sends the data off to be used for Perspective Transformation in the TransformNotifier</li>
+</ul>
+</li>
+</ul>
+
+
+<h1 id="libraries">Libraries</h1>
+
+<ul>
+<li><a href="http://bluecove.org/">Bluecove</a>: It is a library for accessing bluetooth devices.</li><br>
+<li><a href="http://motej.sourceforge.net/">motej</a>: It is a library for communicating with the Wii Remote.</li><br>
+<li>Libraries used by Motej for logging information
+<ul>
+<li>log4j-1.2.15.jar</li>
+<li> slf4j-api-.1.5.8.jar</li>
+<li> slf4j-log4j12-1.5.8.jar</li>
+<li>slf4j-simple-1.5.8.jar</li>
+</ul>
+</li><br>
+<li>Layout Libraries for the GUI
+<ul>
+<li>TableLayout-bin-jdk1.5-2009-08-26.jar</li>
+<li>TableLayout-javadoc-2009-08-26.jar</li>
+<li>TableLayout-src-2009-08-26.jar</li>
+<li>TableLayoutBuilders-all-jdk1.5-2009-08-26.jar</li>
+<li>TableLayoutExtensions-all-jdk1.5-2009-08-26.jar</li>
+</ul>
+</li>
+</ul>
+<h1>Known Bugs and Limitations</h1>
+<ul>
+<li>We do not currently filter the input from the camera for noise. If there is noise while some points are offscreen, it is possible for known points to be labeled as unknown as a result of the point's temporary disappearance due to noise. Once all four fingers are visible again, the points will be properly labeled again.</li>
+<li>Currently, the map image is hardcoded. It is not currently possible to select an alternate map image.</li>
+</ul>
+<h1>Troubleshooting and FAQ</h1>
+<p><strong>Q</strong>. I doubled-click the program but <strong>nothing happened</strong>?</p>
+
+<p><strong>A</strong>. Check whether your Java version is 1.6. You can do this my going to command line or terminal and type <code>java -version</code></p>
+
+
+
+<p><strong>Q</strong>. I copied all the files to my project directory but I still <strong>errors</strong> highlighted in my code?</p>
+
+<p><strong>A</strong>. Check whether you have added the jar files to
+the build path. The jar files are required for the compiler to compile
+and the run the code.</p>
+<p><strong>Problem:</strong> Software fails to launch, displaying an error that "Bluetooth is not available."</p>
+
+<p><strong>Solution:</strong> On Windows, make sure that you have a compatible Bluetooth stack installed. Notably, the default Windows XP Bluetooth stack is NOT compatible with the L2CAP protocol needed to communicate with the Wiimote! On Windows XP, you must have the WIDCOMM, Bluez, or Bluesoleil Bluetooth stacks installed. On Mac OS X, the Bluetooth stack is only available in 32-bit Java at this time. In Mac OS X 10.6 and later, the 64-bit Java runtime is used by default. To change this setting, open /Applications/Utilities/Java Preferences and set the 32-bit Java runtime to have precedence over the 64-bit Java runtime for Java applications.</p>
+
+<p><strong>Problem:</strong> The software can't locate the Wiimote.</p>
+
+<p><strong>Solution:</strong> Make sure you are holding the 1 and 2 buttons and that this causes the row of LEDs on the Wiimote to flash. If you are doing this and are still having problems, hold the power button on the Wiimote to power it off and try again. If this still does not work, and you have used the Wiimote with the computer in question before, delete the Wiimote from the list of known Bluetooth devices at the operating system level and try again.</p>
+
+<p><strong>Problem:</strong> The software loses its connection to the Wiimote.</p>
+
+<p><strong>Solution:</strong> Make sure that the Wiimote is within a few meters of the computer and that the Wiimote batteries are not low in power. If it still doesn't work, try the steps for "The software can't locate the Wiimote" above.</p>
+        
+        
+        </blockquote>
+	</span></div>	</div>
+</body>
+</html>
